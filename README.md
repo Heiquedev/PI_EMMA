@@ -64,3 +64,62 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+
+
+
+
+
+
+// <?php
+
+// Conexão com o banco de dados (alterar conforme seu banco de dados)
+$host = "localhost";
+$user = "seu_usuario";
+$password = "sua_senha";
+$database = "seu_banco_de_dados";
+
+$conexao = new mysqli($host, $user, $password, $database);
+
+// Verifica a conexão
+if ($conexao->connect_error) {
+    die("Conexão falhou: " . $conexao->connect_error);
+}
+
+// Verifica se o formulário foi submetido
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    // Verifica se o arquivo foi submetido
+    if (isset($_FILES["imagem"])) {
+
+        // Configura o diretório de destino
+        $destino = "uploads/". basename($_FILES["imagem"]["name"]); // ou outro diretório da sua preferência
+        // Move o arquivo para o diretório
+        if (move_uploaded_file($_FILES["imagem"]["tmp_name"], $destino)) {
+            echo "O arquivo " . htmlspecialchars(basename($_FILES["imagem"]["name"])) . " foi carregado para " . $destino;
+        } else {
+            echo "Desculpe, houve um erro ao carregar seu arquivo.";
+        }
+    }
+
+    // Salva o caminho da imagem no banco de dados
+    $caminho = $destino; // ou $destino (dependendo do seu diretório)
+    $sql = "INSERT INTO imagens (caminho) VALUES ('$caminho')";
+
+    if ($conexao->query($sql) === TRUE) {
+        echo "Imagem salva com sucesso no banco de dados!";
+    } else {
+        echo "Erro ao salvar no banco de dados: " . $conexao->error;
+    }
+}
+
+$conexao->close();
+?>
+
+<!-- HTML para o formulário de upload -->
+<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" enctype="multipart/form-data">
+    Selecione a imagem para upload:
+    <input type="file" name="imagem" id="imagem">
+    <input type="submit" value="Enviar">
+</form>
+

@@ -1,2 +1,2 @@
 # Usamos Laravel.
-# Usamos React
+# Usamos React.

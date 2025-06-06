@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('salaries', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('employee_id')->constrained()->onDelete('cascade');
+            $table->decimal('amount', 10, 2);
+            $table->date('start_date');
+            $table->date('end_date')->nullable(); // Se nulo, é o salário atual
             $table->timestamps();
         });
     }

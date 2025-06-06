@@ -13,11 +13,46 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        \App\Models\User::factory()->create([
+            'name' => 'Admin RH',
+            'email' => 'admin@example.com',
+            'role' => 'admin',
         ]);
+
+        \App\Models\Department::factory(3)->create()->each(function ($department) {
+            \App\Models\Position::factory(2)->create([
+                'department_id' => $department->id,
+            ])->each(function ($position) {
+                \App\Models\Employee::factory(5)->create([
+                    'position_id' => $position->id,
+                ])->each(function ($employee) {
+                    \App\Models\Absence::factory(rand(0, 3))->create([
+                        'employee_id' => $employee->id,
+                    ]);
+                    
+                    \App\Models\LaborRight::factory()->create([
+                        'employee_id' => $employee->id,
+                    ]);
+                    
+                    \App\Models\Salary::factory()->create([
+                        'employee_id' => $employee->id,
+                        'amount' => rand(2500, 8000),
+                        'start_date' => now()->subMonths(rand(3, 12)),
+                    ]);
+                    
+                    \App\Models\Attendance::factory(5)->create([
+                        'employee_id' => $employee->id,
+                    ]);
+                    
+                    \App\Models\Leave::factory()->create([
+                        'employee_id' => $employee->id,
+                    ]);
+                    
+                    \App\Models\Document::factory()->create([
+                        'employee_id' => $employee->id,
+                    ]);
+                });
+            });
+        });
     }
 }

@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('employees', function (Blueprint $table) {
             $table->id('id_employee')->primary();
-            $table->string('firstname')();
+            $table->string('firstname');
             $table->string('lastname');
             $table->string('email')->unique();
             $table->date('date_of_birth')->nullable();
             $table->date('hire_date');
             $table->double('salary');
             $table->double('costs');
-            $table->integer('absence'); 
+            $table->integer('absence')->default(0); 
             $table->integer('cpf')->unique();
             $table->integer('rg')->nullable();
             $table->integer('phone')->nullable();
@@ -29,7 +29,7 @@ return new class extends Migration
             $table->foreignId('position_id')->constrained()->onDelete('cascade');
             $table->foreignId('tags_id')->constrained()->onDelete('cascade');  
             $table->enum('employment_status', ['active', 'on_leave', 'terminated'])->default('active');
-            $table->timestamps('created_at');
+            $table->timestamps();
 
         });
     }

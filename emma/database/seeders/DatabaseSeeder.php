@@ -39,6 +39,10 @@ class DatabaseSeeder extends Seeder
                         'amount' => rand(2500, 8000),
                         'start_date' => now()->subMonths(rand(3, 12)),
                     ]);
+
+                    \App\Models\Tag::factory(rand(1, 3))->create([
+                        'employee_id' => $employee->id,
+                    ]);
                     
                     \App\Models\Attendance::factory(5)->create([
                         'employee_id' => $employee->id,

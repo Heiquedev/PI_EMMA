@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tags', function (Blueprint $table) {
+        Schema::create('documents', function (Blueprint $table) {
             $table->id();
-            $table->string('color');
-            $table->string('content');
-            $table->timestamps();
             $table->foreignId('employee_id')->constrained()->onDelete('cascade');
+            $table->string('name');
+            $table->string('type');
+            $table->string('path'); // Caminho do arquivo
+            $table->timestamps();
         });
     }
 
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tags');
+        Schema::dropIfExists('documents');
     }
 };

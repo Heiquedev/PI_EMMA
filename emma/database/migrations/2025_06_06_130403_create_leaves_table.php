@@ -11,12 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tags', function (Blueprint $table) {
+        Schema::create('leaves', function (Blueprint $table) {
             $table->id();
-            $table->string('color');
-            $table->string('content');
-            $table->timestamps();
             $table->foreignId('employee_id')->constrained()->onDelete('cascade');
+            $table->enum('type', ['vacation', 'medical', 'unpaid', 'other']);
+            $table->text('reason')->nullable();
+            $table->date('start_date');
+            $table->date('end_date');
+            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
+            $table->timestamps();
         });
     }
 
@@ -25,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tags');
+        Schema::dropIfExists('leaves');
     }
 };

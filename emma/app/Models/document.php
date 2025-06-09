@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Salary extends Model
+class Document extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['employee_id', 'amount', 'start_date', 'end_date'];
+    protected $fillable = ['employee_id', 'name', 'type', 'path'];
 
     public function employee()
     {

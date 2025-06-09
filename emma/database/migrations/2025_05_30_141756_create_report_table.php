@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id('id_report')->primary();
             $table->string('title');
             $table->text('content');
-            $table->unsignedBigInteger('employee_id');
-            $table->timestamps('created_at');
+            $table->foreignId('employee_id')->constrained()->onDelete('cascade');
+            $table->timestamps();
         });
     }
 

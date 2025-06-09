@@ -16,21 +16,19 @@ return new class extends Migration
             $table->string('firstname')();
             $table->string('lastname');
             $table->string('email')->unique();
-            $table->date('birthdate');
+            $table->date('date_of_birth')->nullable();
             $table->date('hire_date');
             $table->double('salary');
             $table->double('costs');
-            $table->int('cpf')->unique();
-            $table->int('rg')->nullable();
-            $table->int('phone')->nullable();
+            $table->integer('absence'); 
+            $table->integer('cpf')->unique();
+            $table->integer('rg')->nullable();
+            $table->integer('phone')->nullable();
             $table->text('description')->nullable();
-            $table->unsignedBigInteger('contract');
-            $table->unsignedBigInteger('absence_id');
+            $table->string('city')->nullable();
             $table->foreignId('position_id')->constrained()->onDelete('cascade');
             $table->foreignId('tags_id')->constrained()->onDelete('cascade');  
-            $table->city('city_id');
-            $table->unsignedBigInteger('labor_rights');
-            $table->unsignedBigInteger('work_shift_id');
+            $table->enum('employment_status', ['active', 'on_leave', 'terminated'])->default('active');
             $table->timestamps('created_at');
 
         });

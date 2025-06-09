@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreEmployeeRequest;
-use App\Models\employee;
+use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
@@ -74,16 +74,44 @@ class EmployeeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, employee $employee)
+    public function update(StoreEmployeeRequest $request, string $id)
     {
-        //
+        try {
+            $employee = Employee::findOrFail($id);
+            $employee->update($request->all());
+        } catch (\Exception $error) {
+            return response()->json([
+                'success' => false,
+                'msg' => 'Error ocorred while updating employee',
+                'error' => $error->getMessage()
+            ], 500);
+        }
+
+        return response()->json([
+            'success' => true,
+            'msg' => 'Employee updated successfully',
+            'data' => $employee
+        ], 201);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(employee $employee)
+    public function destroy(String $id)
     {
-        //
+        try {
+            $employee = Employee::findOrFail($id);
+            $employee->delete();
+        } catch (\Exception $error) {
+            return response()->json([
+                'success' => false,
+                'msg' => 'Error while deleting employee'
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'msg' => 'Employee deleted successfully',
+        ]);
     }
 }

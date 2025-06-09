@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tags', function (Blueprint $table) {
+        Schema::create('positions', function (Blueprint $table) {
             $table->id()->primary();;
-            $table->string('color');
-            $table->string('content');
-            $table->foreignId('employee_id')->constrained()->onDelete('cascade');
+            $table->string('title');
+            $table->text('description')->nullable();
+            $table->foreignId('departament_id')->constrained()->onDelete('cascade');
             $table->timestamp('created_at');
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tags');
+        Schema::dropIfExists('positions');
     }
 };

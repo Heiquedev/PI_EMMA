@@ -12,12 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('salaries', function (Blueprint $table) {
-            $table->id();
+            $table->id()->primary();;
             $table->foreignId('employee_id')->constrained()->onDelete('cascade');
             $table->decimal('amount', 10, 2);
             $table->date('start_date');
             $table->date('end_date')->nullable(); // Se nulo, é o salário atual
-            $table->timestamps();
+            $table->timestamp('created_at');
         });
     }
 

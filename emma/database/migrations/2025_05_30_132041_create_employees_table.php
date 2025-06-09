@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('employees', function (Blueprint $table) {
-            $table->id('id_employee')->primary();
+            $table->id()->primary();
             $table->string('firstname');
             $table->string('lastname');
             $table->string('email')->unique();
@@ -27,9 +27,8 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->string('city')->nullable();
             $table->foreignId('position_id')->constrained()->onDelete('cascade');
-            $table->foreignId('tags_id')->constrained()->onDelete('cascade');  
             $table->enum('employment_status', ['active', 'on_leave', 'terminated'])->default('active');
-            $table->timestamps();
+            $table->timestamp('created_at');
 
         });
     }

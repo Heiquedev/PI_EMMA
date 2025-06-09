@@ -12,12 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('absences', function (Blueprint $table) {
-            $table->id();
+            $table->id()->primary();
             $table->foreignId('employee_id')->constrained()->onDelete('cascade');
             $table->date('date');
             $table->enum('reason', ['unjustified', 'medical', 'personal']);
             $table->text('observation')->nullable();
-            $table->timestamps();
+            $table->timestamp('created_at');
         });
     }
 

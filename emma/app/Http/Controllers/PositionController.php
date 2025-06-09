@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\position;
+use App\Http\Requests\StorePositionRequest;
+use App\Models\Position;
 use Illuminate\Http\Request;
 
 class PositionController extends Controller
@@ -12,7 +13,14 @@ class PositionController extends Controller
      */
     public function index()
     {
-        //
+        $position = Position::all();
+
+        return response()->json([
+            'success' => true,
+            'msg' => 'Positions retrievly successfully',
+            'dataCount' => $position->count(),
+            'data' => $position->load('departament')
+        ], 200);
     }
 
     /**
@@ -26,9 +34,23 @@ class PositionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StorePositionRequest $request)
     {
-        //
+        try {
+            $position = Position::create($request->validated());
+        } catch (\Exception $error) {
+            return response()->json([
+                'success' => false,
+                'msg' => 'Erro ocorred while sending position',
+                'error' => $error->getMessage()
+            ], 500);
+        }
+
+        return response()->json([
+            'success' => true,
+            'msg' => 'Position sent successfully',
+            'data' => $position->load('departament')
+        ], 201);
     }
 
     /**

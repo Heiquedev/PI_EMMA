@@ -12,16 +12,19 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('labor_rights', function (Blueprint $table) {
-            $table->id();
-            $table->boolean('fgts')->default(true);
-            $table->boolean('inss')->default(true);
-            $table->boolean('decimo_terceiro')->default(true);
-            $table->boolean('ferias')->default(true);
-            $table->boolean('vale_transporte')->default(false);
-            $table->boolean('vale_refeicao')->default(false);
-            $table->boolean('vale_alimentacao')->default(false);
-            $table->text('observacoes')->nullable();
-            $table->timestamps();
+            $table->id()->primary();
+            $table->string('contract_type');
+            $table->string('workload');
+            $table->string('is_unionized')->default(false);
+            $table->boolean('has_fgts')->default(true);
+            $table->boolean('has_inss')->default(true);
+            $table->boolean('has_13th')->default(true);
+            $table->boolean('has_vacation')->default(true);
+            $table->boolean('transport')->default(false);
+            $table->boolean('meal_voucher')->default(false);
+            $table->boolean('food_voucher')->default(false);
+            $table->foreignId('employee_id')->constrained()->onDelete('cascade');
+            $table->timestamp('created_at');
         });
     }
 

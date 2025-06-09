@@ -12,12 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('documents', function (Blueprint $table) {
-            $table->id();
+            $table->id()->primary();;
             $table->foreignId('employee_id')->constrained()->onDelete('cascade');
             $table->string('name');
             $table->string('type');
             $table->string('path'); // Caminho do arquivo
-            $table->timestamps();
+            $table->timestamp('created_at');
         });
     }
 

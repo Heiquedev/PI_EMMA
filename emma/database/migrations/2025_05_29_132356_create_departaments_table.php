@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('positions', function (Blueprint $table) {
-            $table->id();
-            $table->string('title');
+        Schema::create('departaments', function (Blueprint $table) {
+            $table->id()->primary();;
             $table->text('description')->nullable();
-            $table->foreignId('departament_id')->constrained()->onDelete('cascade');
-            $table->timestamps();
+            $table->string('departament')->unique();
+            $table->timestamp('created_at');
         });
     }
 
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('positions');
+        Schema::dropIfExists('departaments');
     }
 };

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreLeaveRequest extends FormRequest
 {
@@ -22,7 +23,23 @@ class StoreLeaveRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'employee_id' => ['required', 'string'],
+            'type' => ['required', Rule::in(['vacation', 'medical', 'unpaid', 'other'])],
+            'reson' => ['nullable', 'string', 'max:255'],
+            'start_date' => ['required', 'date'],
+            'end_date' => ['required', 'date'],
+            'status' => ['required', Rule::in(['pending', 'approved', 'rejected'])]
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'employee_id.required' => 'EMPLOYEE_ID is required',            
+            'type.required' => 'TYPE is required',            
+            'start_date.required' => 'START_DATE is required',            
+            'end_date.required' => 'END_DATE is required',            
+            'status.required' => 'STATUS is required',                
         ];
     }
 }

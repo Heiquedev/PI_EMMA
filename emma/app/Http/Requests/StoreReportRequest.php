@@ -22,7 +22,18 @@ class StoreReportRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'employee_id' => ['required', 'string'],
+            'title' => ['required', 'string', 'max:50'],
+            'content' => ['required', 'string'],
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'employee_id.required' => 'EMPLOYEE_ID is required',
+            'title.required' => 'TITLE is required',
+            'content.required' => 'CONTENT is required'
         ];
     }
 }

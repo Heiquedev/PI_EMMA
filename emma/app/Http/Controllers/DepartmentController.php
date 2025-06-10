@@ -2,24 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreDepartamentRequest;
+use App\Http\Requests\StoreDepartmentRequest;
 use App\Models\Department;
 use Illuminate\Http\Request;
 
-class DepartamentController extends Controller
+class DepartmentController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $departament = Department::all();
+        $department = Department::all();
 
         return response()->json([
             'success' => true,
             'msg' => 'Employees retrievly successfully',
-            'dataCount' => $departament->count(),
-            'data' => $departament->load('position')
+            'dataCount' => $department->count(),
+            'data' => $department->load('position')
         ], 200);
     }
 
@@ -34,7 +34,7 @@ class DepartamentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreDepartamentRequest $request)
+    public function store(StoreDepartmentRequest $request)
     {
         try {
             $departament = Department::create($request->validated());
@@ -48,7 +48,7 @@ class DepartamentController extends Controller
 
         return response()->json([
             'success' => true,
-            'msg' => 'Departament sent successfully',
+            'msg' => 'Department sent successfully',
             'data' => $departament
         ], 201);
     }
@@ -72,7 +72,7 @@ class DepartamentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(StoreDepartamentRequest $request, string $id)
+    public function update(StoreDepartmentRequest $request, string $id)
     {
         try {
             $departament = Department::findOrFail($id);
@@ -108,7 +108,7 @@ class DepartamentController extends Controller
         }
 
         return response()->json([
-            'success' => false,
+            'success' => true,
             'msg' => 'Departament deleted successfully',
         ]);
     }

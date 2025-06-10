@@ -2,8 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreLaborRightRequest;
 use App\Models\laborRight;
 use Illuminate\Http\Request;
+
+/*
+    protected $fillable = [
+        'employee_id',
+        'fgts',
+        'inss',
+        'decimo_terceiro',
+        'ferias',
+        'vale_transporte',
+        'vale_refeicao',
+        'vale_alimentacao',
+        'observacoes',
+    ];
+
+ */
 
 class LaborRightController extends Controller
 {
@@ -12,7 +28,14 @@ class LaborRightController extends Controller
      */
     public function index()
     {
-        //
+        $laborRight = LaborRight::all();
+
+        return response()->json([
+            'success' => true,
+            'msg' => 'Labor rights retrievly successfully',
+            'dataCount' => $laborRight->count(),
+            'data' => $laborRight
+        ], 200);
     }
 
     /**
@@ -26,9 +49,23 @@ class LaborRightController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreLaborRightRequest $request)
     {
-        //
+        try {
+            $laborRight = StoreLaborRightRequest::create($request->validated());
+        } catch (\Exception $error) {
+            return response()->json([
+                'success' => false,
+                'msg' => 'Erro ocorred while sending labor rights',
+                'error' => $error->getMessage()
+            ], 500);
+        }
+
+        return response()->json([
+            'success' => true,
+            'msg' => 'Labor rights sent successfully',
+            'data' => $laborRight
+        ], 201);
     }
 
     /**
@@ -50,16 +87,44 @@ class LaborRightController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, laborRight $laborRight)
+    public function update(StoreLaborRightRequest $request, string $id)
     {
-        //
+        try {
+            $laborRight = LaborRight::findOrFail($id);
+            $laborRight->update($request->all());
+        } catch (\Exception $error) {
+            return response()->json([
+                'success' => false,
+                'msg' => 'Error ocorred while updating labor rights',
+                'error' => $error->getMessage()
+            ], 500);
+        }
+
+        return response()->json([
+            'success' => true,
+            'msg' => 'Labor rights updated successfully',
+            'data' => $laborRight
+        ], 201);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(laborRight $laborRight)
+    public function destroy(string $id)
     {
-        //
+        try {
+            $laborRight = LaborRight::findOrFail($id);
+            $laborRight->delete();
+        } catch (\Exception $error) {
+            return response()->json([
+                'success' => false,
+                'msg' => 'Error while deleting labor rights'
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'msg' => 'Labor rights deleted successfully',
+        ]);
     }
 }

@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\document;
+use App\Http\Requests\StoreDocumentRequest;
+use App\Models\Document;
 use Illuminate\Http\Request;
 
 class DocumentController extends Controller
@@ -12,7 +13,14 @@ class DocumentController extends Controller
      */
     public function index()
     {
-        //
+        $document = Document::all();
+
+        return response()->json([
+            'success' => true,
+            'msg' => 'Documents retrievly successfully',
+            'dataCount' => $document->count(),
+            'data' => $document->load('employee')
+        ], 200);
     }
 
     /**
@@ -26,15 +34,29 @@ class DocumentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreDocumentRequest $request)
     {
-        //
+        try {
+            $document = Document::create($request->validated());
+        } catch (\Exception $error) {
+            return response()->json([
+                'success' => false,
+                'msg' => 'Error ocorred while sending document',
+                'error' => $error->getMessage()
+            ], 500);
+        }
+
+        return response()->json([
+            'success' => true,
+            'msg' => 'Document sent successfully',
+            'data' => $document
+        ], 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(document $document)
+    public function show(Document $document)
     {
         //
     }
@@ -42,7 +64,7 @@ class DocumentController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(document $document)
+    public function edit(Document $document)
     {
         //
     }
@@ -50,16 +72,44 @@ class DocumentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, document $document)
+    public function update(StoreDocumentRequest $request, string $id)
     {
-        //
+        try {
+            $document = Document::findOrFail($id);
+            $document->update($request->all());
+        } catch (\Exception $error) {
+            return response()->json([
+                'success' => false,
+                'msg' => 'Error ocorred while updating document',
+                'error' => $error->getMessage()
+            ], 500);
+        }
+
+        return response()->json([
+            'success' => true,
+            'msg' => 'Document updated successfully',
+            'data' => $document
+        ], 201);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(document $document)
+    public function destroy(string $id)
     {
-        //
+        try {
+            $document = Document::findOrFail($id);
+            $document->delete();
+        } catch (\Exception $error) {
+            return response()->json([
+                'success' => false,
+                'msg' => 'Error while deleting document'
+            ]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'msg' => 'Document deleted successfully',
+        ]);
     }
 }

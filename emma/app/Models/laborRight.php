@@ -11,14 +11,16 @@ class LaborRight extends Model
 
     protected $fillable = [
         'employee_id',
-        'fgts',
-        'inss',
-        'decimo_terceiro',
-        'ferias',
-        'vale_transporte',
-        'vale_refeicao',
-        'vale_alimentacao',
-        'observacoes',
+        'contract_type',
+        'workload',
+        'is_uniozined',
+        'has_fgts',
+        'has_inss',
+        'has_13th',
+        'has_vacation',
+        'transport_voucher',
+        'meal_voucher',
+        'food_voucher',
     ];
 
     public function employee()

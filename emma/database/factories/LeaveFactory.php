@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Department>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Leave>
  */
-class DepartmentFactory extends Factory
+class LeaveFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,8 +17,7 @@ class DepartmentFactory extends Factory
     public function definition(): array
     {
         return [
-            'department' => $this->faker->unique()->company,
-            'description' => $this->faker->sentence,
+            //
         ];
     }
 }

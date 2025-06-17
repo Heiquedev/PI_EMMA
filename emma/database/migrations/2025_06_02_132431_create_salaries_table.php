@@ -17,7 +17,7 @@ return new class extends Migration
             $table->decimal('amount', 10, 2);
             $table->date('start_date');
             $table->date('end_date')->nullable(); // Se nulo, é o salário atual
-            $table->timestamp('created_at');
+            $table->timestamps();
         });
     }
 

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->date('date');
             $table->time('clock_in')->nullable();
             $table->time('clock_out')->nullable();
-            $table->timestamp('created_at');
+            $table->timestamps();
         });
     }
 

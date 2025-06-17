@@ -17,9 +17,9 @@ class DepartmentController extends Controller
 
         return response()->json([
             'success' => true,
-            'msg' => 'Employees retrievly successfully',
+            'msg' => 'Departments retrievly successfully',
             'dataCount' => $department->count(),
-            'data' => $department->load('position')
+            'data' => $department->load('positions')
         ], 200);
     }
 
@@ -37,11 +37,12 @@ class DepartmentController extends Controller
     public function store(StoreDepartmentRequest $request)
     {
         try {
-            $departament = Department::create($request->validated());
+            $department = Department::create($request->validated());
         } catch (\Exception $error) {
+
             return response()->json([
                 'success' => false,
-                'msg' => 'Error ocorred while sending departament',
+                'msg' => 'Error ocorred while sending department',
                 'error' => $error->getMessage()
             ], 500);
         }
@@ -49,14 +50,14 @@ class DepartmentController extends Controller
         return response()->json([
             'success' => true,
             'msg' => 'Department sent successfully',
-            'data' => $departament
+            'data' => $department
         ], 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Department $departament)
+    public function show(Department $department)
     {
         //
     }
@@ -64,7 +65,7 @@ class DepartmentController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Department $departament)
+    public function edit(Department $department)
     {
         //
     }
@@ -75,20 +76,20 @@ class DepartmentController extends Controller
     public function update(StoreDepartmentRequest $request, string $id)
     {
         try {
-            $departament = Department::findOrFail($id);
-            $departament->update($request->all());
+            $department = Department::findOrFail($id);
+            $department->update($request->all());
         } catch (\Exception $error) {
             return response()->json([
                 'success' => false,
-                'msg' => 'Error ocorred while updating departament',
+                'msg' => 'Error ocorred while updating department',
                 'error' => $error->getMessage()
             ], 500);
         }
 
         return response()->json([
             'success' => true,
-            'msg' => 'Departament updated successfully',
-            'data' => $departament
+            'msg' => 'Department updated successfully',
+            'data' => $department
         ], 201);
     }
 
@@ -98,18 +99,18 @@ class DepartmentController extends Controller
     public function destroy(string $id)
     {
         try {
-            $departament = Department::findOrFail($id);
-            $departament->delete();
+            $department = Department::findOrFail($id);
+            $department->delete();
         } catch (\Exception $error) {
             return response()->json([
                 'success' => false,
-                'msg' => 'Error while deleting departament'
-            ]);
+                'msg' => 'Error while deleting department'
+            ], 500);
         }
 
         return response()->json([
             'success' => true,
-            'msg' => 'Departament deleted successfully',
-        ]);
+            'msg' => 'Department deleted successfully',
+        ], 201);
     }
 }

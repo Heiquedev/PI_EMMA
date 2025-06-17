@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('color');
             $table->string('content');
             $table->foreignId('employee_id')->constrained()->onDelete('cascade');
-            $table->timestamp('created_at');
+            $table->timestamps();
         });
     }
 

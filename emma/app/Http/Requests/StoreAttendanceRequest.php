@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class StoreAbsenceRequest extends FormRequest
+class StoreAttendanceRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,19 +25,19 @@ class StoreAbsenceRequest extends FormRequest
         return [
             'employee_id' => ['required', Rule::exists('employees', 'id')],
             'date' => ['required', 'date'],
-            'reason' => ['required', 'string', 'max:255'],
-            'observation' => ['nullable', 'string']
+            'clock_in' => ['nullable', 'date_format:H:i'],
+            'clock_out' => ['nullable', 'date_format:H:i', 'after_or_equal:check_in']
         ];
     }
 
-    public function messages()
+    public function messages(): array
     {
         return [
-            'employee_id.required' => 'ABSENCE needs to be linked to an employee',
+            'employee_id.required' => 'EMPLOYEE_ID is required',
             'employee_id.exists' => 'The selected employee does not exist',
             'date.required' => 'DATE is required',
-            'reason.required' => 'REASON is required',
-            'reason.max:255' => 'REASON Max length: 255'
+            'clock_in.date_format' => 'CLOCK_IN time must be in HH:MM format',
+            'clock_out.date_format' => 'CLOCK_OUT must be in HH:MM format'
         ];
     }
 }

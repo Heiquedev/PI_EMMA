@@ -24,7 +24,7 @@ return new class extends Migration
             $table->boolean('meal_voucher')->default(false);
             $table->boolean('food_voucher')->default(false);
             $table->foreignId('employee_id')->constrained()->onDelete('cascade');
-            $table->timestamp('created_at');
+            $table->timestamps();
         });
     }
 

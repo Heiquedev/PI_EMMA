@@ -104,12 +104,12 @@ class AbsenceController extends Controller
             return response()->json([
                 'success' => false,
                 'msg' => 'Error while deleting absence'
-            ]);
+            ], 500);
         }
 
         return response()->json([
             'success' => true,
             'msg' => 'Absence deleted successfully',
-        ]);
+        ], 201);
     }
 }

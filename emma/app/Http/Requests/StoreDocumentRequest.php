@@ -33,12 +33,13 @@ class StoreDocumentRequest extends FormRequest
     public function messages()
     {
         return [
-            'employee_id.required' => 'The document needs to be linked to an employee',
-            'name.required' => 'Name is required',
-            'name.max:255' => 'Max length: 255',
-            'type.required' => 'Type is required',
-            'type.max:255' => 'Max length: 255',
-            'path.required' => 'Path is required'
+            'employee_id.required' => 'EMPLOYEE_ID is required',
+            'employee_id.exists' => 'The selected employee does not exist',
+            'name.required' => 'NAME is required',
+            'name.max:255' => 'NAME Max length: 255',
+            'type.required' => 'TYPE is required',
+            'type.max:255' => 'TYPE Max length: 255',
+            'path.required' => 'PATH is required'
         ];
     }
 }

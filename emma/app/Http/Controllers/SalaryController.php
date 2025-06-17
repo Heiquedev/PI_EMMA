@@ -2,25 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreAttendanceRequest;
-use App\Models\Attendance;
+use App\Http\Requests\StoreSalaryRequest;
+use App\Models\Salary;
 use Illuminate\Http\Request;
 
-class AttendanceController extends Controller
+class SalaryController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $attendances = Attendance::all();
+        $salaries = Salary::all();
 
         return response()->json([
             'success' => true,
-            'msg' => 'Attendances retrievly successfully',
-            'dataCount' => $attendances->count(),
-            'data' => $attendances
-        ], 200);
+            'msg' => 'Salaries retrievly successfully',
+            'data' => $salaries
+        ], 201);
     }
 
     /**
@@ -34,29 +33,29 @@ class AttendanceController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreAttendanceRequest $request)
+    public function store(StoreSalaryRequest $request)
     {
         try {
-            $attendance = Attendance::create($request->validated());
+            $salary = Salary::create($request->validated());
         } catch (\Exception $error) {
             return response()->json([
                 'success' => false,
-                'msg' => 'Error ocorred while sending attendance',
+                'msg' => 'Error ocorred while sending salary',
                 'error' => $error->getMessage()
             ], 500);
         }
 
         return response()->json([
             'success' => true,
-            'msg' => 'Attendance sent successfully',
-            'data' => $attendance
+            'msg' => 'Salary sent successfully',
+            'data' => $salary
         ], 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(attendance $attendance)
+    public function show(Salary $salary)
     {
         //
     }
@@ -64,7 +63,7 @@ class AttendanceController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(attendance $attendance)
+    public function edit(Salary $salary)
     {
         //
     }
@@ -72,23 +71,23 @@ class AttendanceController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(StoreAttendanceRequest $request, string $id)
+    public function update(StoreSalaryRequest $request, string $id)
     {
         try {
-            $attendance = Attendance::findOrFail($id);
-            $attendance->update($request->all());
+            $salary = Salary::findOrFail($id);
+            $salary->update($request->all());
         } catch (\Exception $error) {
             return response()->json([
                 'success' => false,
-                'msg' => 'Error ocorred while updating attendance',
+                'msg' => 'Error ocorred while updating salary',
                 'error' => $error->getMessage()
             ], 500);
         }
 
         return response()->json([
             'success' => true,
-            'msg' => 'Attendance updated successfully',
-            'data' => $attendance
+            'msg' => 'Salary updated successfully',
+            'data' => $salary
         ], 201);
     }
 
@@ -98,18 +97,18 @@ class AttendanceController extends Controller
     public function destroy(string $id)
     {
         try {
-            $attendance = Attendance::findOrFail($id);
-            $attendance->delete();
+            $salary = Salary::findOrFail($id);
+            $salary->delete();
         } catch (\Exception $error) {
             return response()->json([
                 'success' => false,
-                'msg' => 'Error while deleting attendance'
+                'msg' => 'Error while deleting salary'
             ]);
         }
 
         return response()->json([
             'success' => false,
-            'msg' => 'Attendance deleted successfully',
+            'msg' => 'Salary deleted successfully',
         ]);
     }
 }

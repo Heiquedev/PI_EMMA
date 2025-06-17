@@ -17,7 +17,7 @@ return new class extends Migration
             $table->date('date');
             $table->enum('reason', ['unjustified', 'medical', 'personal']);
             $table->text('observation')->nullable();
-            $table->timestamp('created_at');
+            $table->timestamps();
         });
     }
 

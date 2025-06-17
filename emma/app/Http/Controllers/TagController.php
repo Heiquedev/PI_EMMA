@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\tag;
+use App\Http\Requests\StoreTagRequest;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 
 class TagController extends Controller
@@ -12,7 +13,13 @@ class TagController extends Controller
      */
     public function index()
     {
-        //
+        $tags = Tag::all();
+
+        return response()->json([
+            'success' => true,
+            'msg' => 'Tags retrievly successfully',
+            'data' => $tags
+        ], 201);
     }
 
     /**
@@ -26,9 +33,23 @@ class TagController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreTagRequest $request)
     {
-        //
+        try {
+            $tag = Tag::create($request->validated());
+        } catch (\Exception $error) {
+            return response()->json([
+                'success' => false,
+                'msg' => 'Error ocorred while sending tag',
+                'error' => $error->getMessage()
+            ], 500);
+        }
+
+        return response()->json([
+            'success' => true,
+            'msg' => 'Tag sent successfully',
+            'data' => $tag
+        ], 201);
     }
 
     /**
@@ -50,16 +71,44 @@ class TagController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, tag $tag)
+    public function update(StoreTagRequest $request, string $id)
     {
-        //
+        try {
+            $tag = Tag::findOrFail($id);
+            $tag->update($request->all());
+        } catch (\Exception $error) {
+            return response()->json([
+                'success' => false,
+                'msg' => 'Error ocorred while updating tag',
+                'error' => $error->getMessage()
+            ], 500);
+        }
+
+        return response()->json([
+            'success' => true,
+            'msg' => 'Tag updated successfully',
+            'data' => $tag
+        ], 201);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(tag $tag)
+    public function destroy(string $id)
     {
-        //
+        try {
+            $tag = Tag::findOrFail($id);
+            $tag->delete();
+        } catch (\Exception $error) {
+            return response()->json([
+                'success' => false,
+                'msg' => 'Error while deleting tag'
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'msg' => 'Tag deleted successfully',
+        ]);
     }
 }

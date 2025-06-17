@@ -28,7 +28,7 @@ return new class extends Migration
             $table->string('city')->nullable();
             $table->foreignId('position_id')->constrained()->onDelete('cascade');
             $table->enum('employment_status', ['active', 'on_leave', 'terminated'])->default('active');
-            $table->timestamp('created_at');
+            $table->timestamps();
 
         });
     }

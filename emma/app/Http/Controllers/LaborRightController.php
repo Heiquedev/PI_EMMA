@@ -119,12 +119,12 @@ class LaborRightController extends Controller
             return response()->json([
                 'success' => false,
                 'msg' => 'Error while deleting labor rights'
-            ]);
+            ], 500);
         }
 
         return response()->json([
             'success' => false,
             'msg' => 'Labor rights deleted successfully',
-        ]);
+        ], 201);
     }
 }

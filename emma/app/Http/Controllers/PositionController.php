@@ -19,8 +19,8 @@ class PositionController extends Controller
             'success' => true,
             'msg' => 'Positions retrievly successfully',
             'dataCount' => $position->count(),
-            'data' => $position->load('departament')
-        ], 200);
+            'data' => $position->load('department')
+        ], 201);
     }
 
     /**
@@ -49,7 +49,7 @@ class PositionController extends Controller
         return response()->json([
             'success' => true,
             'msg' => 'Position sent successfully',
-            'data' => $position->load('departament')
+            'data' => $position->load('department')
         ], 201);
     }
 
@@ -72,16 +72,44 @@ class PositionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, position $position)
+    public function update(StorePositionRequest $request, string $id)
     {
-        //
+        try {
+            $position = Position::findOrFail($id);
+            $position->update($request->all());
+        } catch (\Exception $error) {
+            return response()->json([
+                'success' => false,
+                'msg' => 'Error ocorred while updating position',
+                'error' => $error->getMessage()
+            ], 500);
+        }
+
+        return response()->json([
+            'success' => true,
+            'msg' => 'Position updated successfully',
+            'data' => $position
+        ], 201);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(position $position)
+    public function destroy(string $id)
     {
-        //
+        try {
+            $position = Position::findOrFail($id);
+            $position->delete();
+        } catch (\Exception $error) {
+            return response()->json([
+                'success' => false,
+                'msg' => 'Error while deleting position'
+            ], 500);
+        }
+
+        return response()->json([
+            'success' => false,
+            'msg' => 'Position deleted successfully',
+        ], 200);
     }
 }

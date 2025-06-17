@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreLaborRightRequest extends FormRequest
 {
@@ -22,7 +23,7 @@ class StoreLaborRightRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'employee_id' => ['required', 'string'],
+            'employee_id' => ['required', Rule::exists('employees', 'id')],
             'contract_type' => ['required', 'string', 'max:255'],
             'workload' => ['required', 'string', 'max:255'],
             'is_unionized' => ['required', 'boolean'],
@@ -38,9 +39,10 @@ class StoreLaborRightRequest extends FormRequest
     public function messages()
     {  
         return [
-            'employee_id.required' => 'Employee id is required',
-            'contract_type.required' => 'Contract type is required',
-            'workload.required' => 'Workload is required',
+            'employee_id.required' => 'EMPLOYEE_ID is required',
+            'employee_id.exists' => 'The selected employee does not exist',
+            'contract_type.required' => 'CONTRACT_TYPE is required',
+            'workload.required' => 'WORKLOAD is required',
             'is_unionized.required' => 'IS_UNIONIZED is required',
             'has_fgts.required' => 'HAS_FGTS is required',
             'has_inss.required' => 'HAS_INSS is required',

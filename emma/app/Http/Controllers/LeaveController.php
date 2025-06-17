@@ -104,12 +104,12 @@ class LeaveController extends Controller
             return response()->json([
                 'success' => false,
                 'msg' => 'Error while deleting leave'
-            ]);
+            ], 500);
         }
 
         return response()->json([
             'success' => false,
             'msg' => 'Leave deleted successfully',
-        ]);
+        ], 201);
     }
 }

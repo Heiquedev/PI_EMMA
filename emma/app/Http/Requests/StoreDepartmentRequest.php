@@ -3,16 +3,13 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreDepartmentRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
-    public function authorize(): bool
-    {
-        return false;
-    }
 
     /**
      * Get the validation rules that apply to the request.
@@ -22,15 +19,16 @@ class StoreDepartmentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255']
+            'department' => ['required', 'string', 'max:255'],
+            'description' => ['required', 'string']
         ];
     }
 
     public function messages()
     {
         return [
-            'name.required' => 'Name is required',
-            'name.max:255' => 'Max length: 255'
+            'department.required' => 'DEPARTAMENT is required',
+            'department.max:255' => 'DEPARAMENT NAME Max length: 255'
         ];
     }
 }

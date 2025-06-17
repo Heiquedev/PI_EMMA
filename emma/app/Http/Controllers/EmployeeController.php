@@ -104,12 +104,12 @@ class EmployeeController extends Controller
             return response()->json([
                 'success' => false,
                 'msg' => 'Error while deleting employee'
-            ]);
+            ], 500);
         }
 
         return response()->json([
             'success' => false,
             'msg' => 'Employee deleted successfully',
-        ]);
+        ], 201);
     }
 }

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('type');
             $table->string('path'); // Caminho do arquivo
-            $table->timestamp('created_at');
+            $table->timestamps();
         });
     }
 

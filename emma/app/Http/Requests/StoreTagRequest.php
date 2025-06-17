@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreTagRequest extends FormRequest
 {
@@ -22,7 +23,19 @@ class StoreTagRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'color' => ['required', 'string', 'max:50'],
+            'content' => ['required', 'string', 'max:30'],
+            'employee_id' => ['required', Rule::exists('employees', 'id')]
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'employee_id.required' => 'EMPLOYEE_ID is required',
+            'employee_id.exists' => 'The selected employee does not exist',
+            'color.required' => 'COLOR is required',
+            'content.required' => 'CONTENT is required',
         ];
     }
 }

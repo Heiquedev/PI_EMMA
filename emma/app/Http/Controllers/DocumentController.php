@@ -104,12 +104,12 @@ class DocumentController extends Controller
             return response()->json([
                 'success' => false,
                 'msg' => 'Error while deleting document'
-            ]);
+            ], 500);
         }
 
         return response()->json([
             'success' => true,
             'msg' => 'Document deleted successfully',
-        ]);
+        ], 201);
     }
 }

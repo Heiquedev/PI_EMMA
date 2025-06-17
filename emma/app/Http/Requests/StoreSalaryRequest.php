@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreSalaryRequest extends FormRequest
 {
@@ -22,7 +23,21 @@ class StoreSalaryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'employee_id' => ['required', Rule::exists('employees', 'id')],
+            'amount' => ['required'],
+            'start_date' => ['required', 'date'],
+            'end_date' => ['nullable', 'date']
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'employee_id.required' => 'EMPLOYEE_ID is required',                    
+            'employee_id.exists' => 'The selected employee does not exist',                    
+            'amount.required' => 'AMOUNT is required',                    
+            'start_date.required' => 'START_DATE is required',                    
+            'end_date.required' => 'END_DATE is required'                     
         ];
     }
 }

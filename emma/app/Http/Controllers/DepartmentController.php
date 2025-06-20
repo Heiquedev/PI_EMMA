@@ -57,9 +57,15 @@ class DepartmentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Department $department)
+    public function show(string $id)
     {
-        //
+        $department = Department::findOrFail($id);
+
+        return response()->json([
+            'success' => true,  
+            'msg' => 'Department retrievly successfully',
+            'data' => $department->load('positions')
+        ], 200);
     }
 
     /**

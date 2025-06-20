@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreLeaveRequest;
+use App\Models\Employee;
 use App\Models\Leave;
 use Illuminate\Http\Request;
 
@@ -56,9 +57,15 @@ class LeaveController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(leave $leave)
+    public function show(string $id)
     {
-        //
+        $employee = Employee::findOrFail($id);
+
+        return response()->json([
+            'success' => true,
+            'msg' => 'Leaves retrievly successfully',
+            'data' => $employee->load('leaves')
+        ], 200);
     }
 
     /**

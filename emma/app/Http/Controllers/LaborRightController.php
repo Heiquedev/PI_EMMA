@@ -3,23 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreLaborRightRequest;
-use App\Models\laborRight;
+use App\Models\LaborRight;
 use Illuminate\Http\Request;
-
-/*
-    protected $fillable = [
-        'employee_id',
-        'fgts',
-        'inss',
-        'decimo_terceiro',
-        'ferias',
-        'vale_transporte',
-        'vale_refeicao',
-        'vale_alimentacao',
-        'observacoes',
-    ];
-
- */
 
 class LaborRightController extends Controller
 {
@@ -71,9 +56,15 @@ class LaborRightController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(laborRight $laborRight)
+    public function show(string $id)
     {
-        //
+        $laborRight = LaborRight::findOrFail($id);
+
+        return response()->json([
+            'success' => true,
+            'msg' => 'Employee retrievly successfully',
+            'data' => $laborRight
+        ], 200);
     }
 
     /**

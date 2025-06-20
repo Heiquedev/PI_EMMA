@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreDocumentRequest;
 use App\Models\Document;
+use App\Models\Employee;
 use Illuminate\Http\Request;
 
 class DocumentController extends Controller
@@ -56,9 +57,15 @@ class DocumentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Document $document)
+    public function show(string $id)
     {
-        //
+        $employee = Employee::findOrFail($id);
+
+        return response()->json([
+            'success' => true,
+            'msg' => 'Documents retrievly successfully',
+            'data' => $employee->load('documents')
+        ], 200);
     }
 
     /**

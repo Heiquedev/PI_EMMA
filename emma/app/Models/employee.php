@@ -41,7 +41,7 @@ class Employee extends Model
     }
     public function tags()
     {
-        return $this->hasMany(Tag::class);
+        return $this->hasMany(Tags::class);
     }
     public function laborRights()
     {
@@ -50,5 +50,9 @@ class Employee extends Model
     public function absences()
     {
         return $this->hasMany(Absence::class);
+    }
+    public function reports()
+    {
+        return $this->hasMany(Report::class);
     }
 }

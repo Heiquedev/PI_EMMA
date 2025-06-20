@@ -19,7 +19,7 @@ class EmployeeController extends Controller
             'success' => true,
             'msg' => 'Employees retrievly successfully',
             'dataCount' => $employee->count(),
-            'data' => $employee->load('position', 'documents', 'laborRights')
+            'data' => $employee->load('position', 'documents', 'laborRights', 'tags', 'reports', 'leaves', 'salaries')
         ], 200);
     }
 
@@ -56,9 +56,15 @@ class EmployeeController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Request $request)
+    public function show(string $id)
     {
-        //
+        $employee = Employee::findOrFail($id);
+
+        return response()->json([
+            'success' => true,
+            'msg' => 'Employee retrievly successfully',
+            'data' => $employee->load('position', 'documents', 'laborRights', 'tags', 'reports', 'leaves', 'salaries')
+        ], 200);
     }
 
     /**

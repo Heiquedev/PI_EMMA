@@ -40,7 +40,7 @@ class DatabaseSeeder extends Seeder
 
                     ]);
 
-                    \App\Models\Tag::factory(rand(1, 3))->create([
+                    \App\Models\Tags::factory(rand(1, 3))->create([
                         'employee_id' => $employee->id,
                     ]);
                     
@@ -53,6 +53,9 @@ class DatabaseSeeder extends Seeder
                     ]);
                     
                     \App\Models\Document::factory()->create([
+                        'employee_id' => $employee->id,
+                    ]);
+                    \App\Models\Report::factory()->create([
                         'employee_id' => $employee->id,
                     ]);
                 });

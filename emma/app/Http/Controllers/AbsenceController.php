@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreAbsenceRequest;
 use App\Models\Absence;
+use App\Models\Employee;
 use Illuminate\Http\Request;
 
 class AbsenceController extends Controller
@@ -56,9 +57,15 @@ class AbsenceController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(absence $absence)
+    public function show(string $id)
     {
-        //
+        $employee = Employee::findOrFail($id);
+
+        return response()->json([
+            'success' => true,
+            'msg' => 'Absence retrievly successfully',
+            'data' => $employee->load('absences')
+        ], 200);
     }
 
     /**

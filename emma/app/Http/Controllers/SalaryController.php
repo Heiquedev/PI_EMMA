@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreSalaryRequest;
+use App\Models\Employee;
 use App\Models\Salary;
 use Illuminate\Http\Request;
 
@@ -55,9 +56,15 @@ class SalaryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Salary $salary)
+    public function show(string $id)
     {
-        //
+        $employee = Employee::findOrFail($id);
+
+        return response()->json([
+            'success' => true,
+            'msg' => 'Salaries retrievly successfully',
+            'data' => $employee->load('salaries')
+        ], 201);
     }
 
     /**

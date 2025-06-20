@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreAttendanceRequest;
 use App\Models\Attendance;
+use App\Models\Employee;
 use Illuminate\Http\Request;
 
 class AttendanceController extends Controller
@@ -56,9 +57,15 @@ class AttendanceController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(attendance $attendance)
+    public function show(string $id)
     {
-        //
+        $employee = Employee::findOrFail($id);
+
+        return response()->json([
+            'success' => true,
+            'msg' => 'Attendance retrievly successfully',
+            'data' => $employee->load('attendances')
+        ], 200);
     }
 
     /**

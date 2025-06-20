@@ -19,7 +19,7 @@ class PositionController extends Controller
             'success' => true,
             'msg' => 'Positions retrievly successfully',
             'dataCount' => $position->count(),
-            'data' => $position->load('department')
+            'data' => $position->load('department', 'employees')
         ], 201);
     }
 
@@ -56,9 +56,15 @@ class PositionController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(position $position)
+    public function show(string $id)
     {
-        //
+        $position = Position::findOrFail($id);
+
+        return response()->json([
+            'success' => true,
+            'msg' => 'Position retrievly successfully',
+            'data' => $position->load('department', 'employees')
+        ], 200);
     }
 
     /**

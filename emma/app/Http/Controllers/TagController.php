@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTagRequest;
-use App\Models\Tag;
+use App\Models\Employee;
+use App\Models\Tags;
 use Illuminate\Http\Request;
 
 class TagController extends Controller
@@ -13,7 +14,7 @@ class TagController extends Controller
      */
     public function index()
     {
-        $tags = Tag::all();
+        $tags = Tags::all();
 
         return response()->json([
             'success' => true,
@@ -36,7 +37,7 @@ class TagController extends Controller
     public function store(StoreTagRequest $request)
     {
         try {
-            $tag = Tag::create($request->validated());
+            $tag = Tags::create($request->validated());
         } catch (\Exception $error) {
             return response()->json([
                 'success' => false,
@@ -55,15 +56,21 @@ class TagController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(tag $tag)
+    public function show(string $id)
     {
-        //
+        $employee = Employee::findOrFail($id);
+
+        return response()->json([
+            'success' => true,
+            'msg' => 'Tags retrievly successfully',
+            'data' => $employee->load('tags')
+        ], 200);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(tag $tag)
+    public function edit(Tags $tag)
     {
         //
     }
@@ -74,7 +81,7 @@ class TagController extends Controller
     public function update(StoreTagRequest $request, string $id)
     {
         try {
-            $tag = Tag::findOrFail($id);
+            $tag = Tags::findOrFail($id);
             $tag->update($request->all());
         } catch (\Exception $error) {
             return response()->json([
@@ -97,7 +104,7 @@ class TagController extends Controller
     public function destroy(string $id)
     {
         try {
-            $tag = Tag::findOrFail($id);
+            $tag = Tags::findOrFail($id);
             $tag->delete();
         } catch (\Exception $error) {
             return response()->json([

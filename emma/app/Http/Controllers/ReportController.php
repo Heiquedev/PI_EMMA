@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreReportRequest;
+use App\Models\Employee;
 use App\Models\Report;
 use Illuminate\Http\Request;
 
@@ -57,9 +58,15 @@ class ReportController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(report $report)
+    public function show(string $id)
     {
-        //
+        $employee = Employee::findOrFail($id);
+
+        return response()->json([
+            'success' => true,
+            'msg' => 'Reports retrievly successfully',
+            'data' => $employee->load('reports')
+        ], 200);
     }
 
     /**

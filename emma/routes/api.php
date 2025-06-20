@@ -9,7 +9,8 @@ use App\Http\Controllers\{
     AbsenceController,
     TagController,
     LaborRightController,
-    AttendanceController
+    AttendanceController,
+    DocumentController
 };
 
 // Rotas protegidas por autenticação (opcional, ex: Sanctum)
@@ -50,6 +51,8 @@ Route::delete('tags/{tag}', [TagController::class, 'destroy']);
 
 // Departamentos
 Route::apiResource('departments', DepartmentController::class);
-Route::get('departments/{department}/employees', [DepartmentController::class, 'employees']);
+
+// Documents
+Route::get('employees/{employee}/documents', [DocumentController::class, 'index']);
 
 // });

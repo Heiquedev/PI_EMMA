@@ -18,7 +18,7 @@ class TagController extends Controller
         return response()->json([
             'success' => true,
             'msg' => 'Tags retrievly successfully',
-            'data' => $tags
+            'data' => $tags->load('employee')
         ], 201);
     }
 

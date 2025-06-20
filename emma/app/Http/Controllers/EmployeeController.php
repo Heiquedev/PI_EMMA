@@ -19,7 +19,7 @@ class EmployeeController extends Controller
             'success' => true,
             'msg' => 'Employees retrievly successfully',
             'dataCount' => $employee->count(),
-            'data' => $employee->load('tag', 'position')
+            'data' => $employee->load('position', 'documents', 'laborRights')
         ], 200);
     }
 

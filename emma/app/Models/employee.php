@@ -43,7 +43,7 @@ class Employee extends Model
     {
         return $this->hasMany(Tag::class);
     }
-    public function laborRight()
+    public function laborRights()
     {
         return $this->hasOne(LaborRight::class);
     }

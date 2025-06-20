@@ -12,12 +12,13 @@ class DatabaseSeeder extends Seeder
      * Seed the application's database.
      */
     public function run(): void
-    {
+    {/*
         \App\Models\User::factory()->create([
             'name' => 'Admin RH',
             'email' => 'admin@example.com',
             'role' => 'admin',
         ]);
+        */
 
         \App\Models\Department::factory(3)->create()->each(function ($department) {
             \App\Models\Position::factory(2)->create([
@@ -36,8 +37,7 @@ class DatabaseSeeder extends Seeder
                     
                     \App\Models\Salary::factory()->create([
                         'employee_id' => $employee->id,
-                        'amount' => rand(2500, 8000),
-                        'start_date' => now()->subMonths(rand(3, 12)),
+
                     ]);
 
                     \App\Models\Tag::factory(rand(1, 3))->create([

@@ -10,23 +10,20 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class LaborRightFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
         return [
-            'employee_id' => Employee::factory(),
-            'fgts' => true,
-            'inss' => true,
-            'decimo_terceiro' => true,
-            'ferias' => true,
-            'vale_transporte' => $this->faker->boolean,
-            'vale_refeicao' => $this->faker->boolean,
-            'vale_alimentacao' => $this->faker->boolean,
-            'observacoes' => $this->faker->optional()->sentence,
+            'contract_type' => $this->faker->randomElement(['CLT', 'PJ', 'Estágio', 'Temporário']),
+            'workload' => $this->faker->randomElement(['40h', '30h', '20h', '12x36']),
+            'is_unionized' => $this->faker->boolean(),
+            'has_fgts' => $this->faker->boolean(90), // 90% chance de ser true
+            'has_inss' => $this->faker->boolean(90),
+            'has_13th' => $this->faker->boolean(90),
+            'has_vacation' => $this->faker->boolean(90),
+            'transport' => $this->faker->boolean(50),
+            'meal_voucher' => $this->faker->boolean(50),
+            'food_voucher' => $this->faker->boolean(50),
+            'employee_id' => Employee::factory(), // ou passe diretamente no seeder
         ];
     }
 }

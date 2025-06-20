@@ -12,7 +12,7 @@ class Employee extends Model
 
     protected $fillable = [
         'first_name', 'last_name', 'email', 'phone', 'cpf', 'rg',
-        'date_of_birth', 'hire_date', 'position_id', 'employment_status', 'costs', 'absence', 'description', 'city'
+        'date_of_birth', 'hire_date', 'position_id', 'employment_status', 'absence', 'description', 'city'
     ];
 
     public function position()

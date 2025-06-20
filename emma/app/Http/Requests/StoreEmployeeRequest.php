@@ -12,7 +12,7 @@ class StoreEmployeeRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -30,7 +30,7 @@ class StoreEmployeeRequest extends FormRequest
             'city' => ['nullable', 'string', 'max:50'],
             'birth_date' => ['required', 'date', 'before:today'],
             'hire_date' => ['required', 'date', 'before_or_equals:today'],
-            'phone' => ['nullable', 'string', 'max:20', 'regex:/^\+?[0-9\s\-()]+$/'],
+            'phone' => ['nullable', 'string', 'max:255', 'regex:/^[\d\s\-\+\(\)]+$/'],
             'status' => ['required', Rule::in(['active', 'inactive', 'suspended'])],
             'position_id' => ['required', Rule::exists('positions', 'id')],
         ];

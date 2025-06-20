@@ -10,6 +10,7 @@ use App\Http\Controllers\{
     TagController,
     LaborRightController,
     AttendanceController,
+    PositionController,
     DocumentController
 };
 
@@ -51,8 +52,6 @@ Route::delete('tags/{tag}', [TagController::class, 'destroy']);
 
 // Departamentos
 Route::apiResource('departments', DepartmentController::class);
-
-// Documents
-Route::get('employees/{employee}/documents', [DocumentController::class, 'index']);
+Route::get('departments/{department}/employees', [DepartmentController::class, 'employees']);
 
 // });

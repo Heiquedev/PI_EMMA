@@ -1,19 +1,18 @@
-import React from "react";
-import StatCard from "./StatCard";
-import styles from './styles/Dashboard.module.css'
+import React from 'react';
+import StatCard from './StatCard';
+import styles from './Dashboard.module.css';
 
 const Dashboard: React.FC = () => (
-  <section id="dashboard" className="tab-content active">
+  <section id="dashboard" className={styles.tabContent}>
     <h2>Dashboard</h2>
-    <div className="stats-container">
+    <div className={styles.statsContainer}>
       <StatCard title="Total de Funcionários" value={0} />
       <StatCard title="Férias Pendentes" value={0} />
       <StatCard title="Aniversariantes" value={0} />
     </div>
-
-    <div className="recent-activity">
-      <h3>Atividades Recentes</h3>
-      <ul id="activity-list"></ul>
+    <div className={styles.recentActivity}>
+      <h3 className={styles.recentActivityTitle}>Atividades Recentes</h3>
+      <ul className={styles.recentActivityList}></ul>
     </div>
   </section>
 );

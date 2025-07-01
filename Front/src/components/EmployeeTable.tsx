@@ -1,22 +1,19 @@
-import React from "react";
-import styles from './styles/EmployeeTable.module.css'
-
+import React from 'react';
+import styles from './EmployeeTable.module.css';
 
 const EmployeeTable: React.FC = () => (
-  <table id="employees-table">
+  <table className={styles.table}>
     <thead>
       <tr>
-        <th>ID</th>
-        <th>Nome</th>
-        <th>Departamento</th>
-        <th>Cargo</th>
-        <th>Data de Admissão</th>
-        <th>Ações</th>
+        <th className={styles.th}>ID</th>
+        <th className={styles.th}>Nome</th>
+        <th className={styles.th}>Departamento</th>
+        <th className={styles.th}>Cargo</th>
+        <th className={styles.th}>Data de Admissão</th>
+        <th className={styles.th}>Ações</th>
       </tr>
     </thead>
-    <tbody>
-      {/* Preenchido dinamicamente */}
-    </tbody>
+    <tbody></tbody>
   </table>
 );
 

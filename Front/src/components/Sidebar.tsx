@@ -1,22 +1,28 @@
-import React from "react";
+import React from 'react';
+import styles from './Sidebar.module.css';
 
 const Sidebar: React.FC = () => (
-  <nav className="sidebar">
-    <ul>
-      {[
-        { href: "#dashboard", icon: "fa-tachometer-alt", label: "Dashboard" },
-        { href: "#funcionarios", icon: "fa-user-tie", label: "Funcionários" },
-        { href: "#departamentos", icon: "fa-building", label: "Departamentos" },
-        { href: "#cargos", icon: "fa-briefcase", label: "Cargos" },
-        { href: "#folha", icon: "fa-file-invoice-dollar", label: "Folha de Pagamento" },
-        { href: "#beneficios", icon: "fa-hand-holding-heart", label: "Benefícios" },
-        { href: "#relatorios", icon: "fa-chart-bar", label: "Relatórios" },
-        { href: "#configuracoes", icon: "fa-cog", label: "Configurações" }
-      ].map(({ href, icon, label }) => (
-        <li key={href}>
-          <a href={href}><i className={`fas ${icon}`}></i> {label}</a>
-        </li>
-      ))}
+  <nav className={styles.sidebar}>
+    <ul className={styles.menu}>
+      {["Dashboard", "Funcionários", "Departamentos", "Cargos", "Folha de Pagamento", "Benefícios", "Relatórios", "Configurações"].map((label, index) => {
+        const icons = [
+          'fa-tachometer-alt',
+          'fa-user-tie',
+          'fa-building',
+          'fa-briefcase',
+          'fa-file-invoice-dollar',
+          'fa-hand-holding-heart',
+          'fa-chart-bar',
+          'fa-cog',
+        ];
+        return (
+          <li key={label} className={styles.menuItem}>
+            <a href={`#${label.toLowerCase()}`} className={styles.link}>
+              <i className={`fas ${icons[index]}`}></i> {label}
+            </a>
+          </li>
+        );
+      })}
     </ul>
   </nav>
 );

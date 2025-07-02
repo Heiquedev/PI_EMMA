@@ -1,25 +1,62 @@
 .tabContent {
-    display: block;
-  }
-  
+  display: none;
+}
+
+.tabContent.active {
+  display: block;
+}
+
+.statsContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.statCard {
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.statCard h3 {
+  font-size: 1rem;
+  color: #7f8c8d;
+  margin-bottom: 10px;
+}
+
+.statCard p {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.recentActivity {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.recentActivity h3 {
+  margin-bottom: 15px;
+}
+
+.recentActivity ul {
+  list-style: none;
+}
+
+.recentActivity li {
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+}
+
+@media (max-width: 768px) {
   .statsContainer {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
-    margin-bottom: 30px;
+    grid-template-columns: 1fr;
   }
-  
-  .recentActivity {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  }
-  
-  .recentActivityTitle {
-    margin-bottom: 15px;
-  }
-  
-  .recentActivityList {
-    list-style: none;
-  }
+}

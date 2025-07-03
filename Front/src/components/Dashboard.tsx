@@ -1,54 +1,109 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import StatCard from './StatCard';
-import ActivityList from './ActivityList';
 import styles from './Dashboard.module.css';
+import axios from 'axios';
+import {
+  BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer
+} from 'recharts';
+
+interface Stats {
+  total_employees: number;
+  pending_vacations: number;
+  birthdays: number;
+}
+
+interface Activity {
+  type: string;
+  message: string;
+  created_at: string;
+}
 
 const Dashboard: React.FC = () => {
-  const [totalEmployees, setTotalEmployees] = useState(0);
-  const [pendingVacations, setPendingVacations] = useState(0);
-  const [birthdays, setBirthdays] = useState(0);
-  const [activities, setActivities] = useState<string[]>([]);
+  const [stats, setStats] = useState<Stats | null>(null);
+  const [activities, setActivities] = useState<Activity[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
-    axios.get('http://localhost:8000/api/employees')
-      .then(response => {
-        const employees = response.data.data;
-
-        setTotalEmployees(employees.length);
-
-        const today = new Date();
-        const birthdayCount = employees.filter((emp: any) => {
-          if (!emp.birth_date) return false;
-          const birth = new Date(emp.birth_date);
-          return birth.getDate() === today.getDate() && birth.getMonth() === today.getMonth();
-        }).length;
-        setBirthdays(birthdayCount);
-
-        const vacationCount = employees.filter((emp: any) => emp.vacation_days > 0).length;
-        setPendingVacations(vacationCount);
-
-        const activityList = employees.slice(0, 5).map((emp: any) =>
-          `Funcionário ${emp.first_name} ${emp.last_name} do departamento ${emp.position?.department?.department ?? '—'} foi registrado.`
-        );
-        setActivities(activityList);
-
+    axios.get('http://localhost:8000/api/dashboard')
+      .then((response) => {
+        setStats(response.data.stats ?? {
+          total_employees: 0,
+          pending_vacations: 0,
+          birthdays: 0,
+        });
+        setActivities(response.data.activities ?? []);
       })
-      .catch(error => {
-        console.error('Erro ao carregar dados da dashboard:', error);
-      });
+      .catch((err) => {
+        console.error("Falha ao buscar dados da API:", err);
+        setError(true);
+      })
+      .finally(() => setLoading(false));
   }, []);
 
+  const chartData = stats ? [
+    { name: 'Funcionários', value: stats.total_employees },
+    { name: 'Férias Pendentes', value: stats.pending_vacations },
+    { name: 'Aniversariantes', value: stats.birthdays },
+  ] : [];
+
   return (
-    <section id="dashboard" className={styles.tabContent}>
+    <div className={styles.dashboard}>
       <h2>Dashboard</h2>
-      <div className={styles.statsContainer}>
-        <StatCard title="Total de Funcionários" value={totalEmployees} />
-        <StatCard title="Férias Pendentes" value={pendingVacations} />
-        <StatCard title="Aniversariantes" value={birthdays} />
-      </div>
-      <ActivityList activities={activities} />
-    </section>
+
+      {loading ? (
+        <p>Carregando glória...</p>
+      ) : error ? (
+        <p>Falha ao conectar-se ao trono. Verifique o servidor.</p>
+      ) : (
+        <>
+          {/* Estatísticas principais */}
+          <div className={styles.statsContainer}>
+            <div className={styles.statCard}>
+              <h3>Total de Funcionários</h3>
+              <p>{stats?.total_employees ?? '-'}</p>
+            </div>
+            <div className={styles.statCard}>
+              <h3>Férias Pendentes</h3>
+              <p>{stats?.pending_vacations ?? '-'}</p>
+            </div>
+            <div className={styles.statCard}>
+              <h3>Aniversariantes</h3>
+              <p>{stats?.birthdays ?? '-'}</p>
+            </div>
+          </div>
+
+          {/* Gráfico com Recharts */}
+          <div className={styles.chartContainer}>
+            <h3>Resumo Visual</h3>
+            <ResponsiveContainer width="100%" height={250}>
+              <BarChart data={chartData}>
+                <XAxis dataKey="name" />
+                <YAxis allowDecimals={false} />
+                <Tooltip />
+                <Bar dataKey="value" fill="#8884d8" radius={[8, 8, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* Atividades Recentes */}
+          <div className={styles.activity}>
+            <h3>Atividades Recentes</h3>
+            {activities.length > 0 ? (
+              <ul className={styles.activityList}>
+                {activities.map((act, idx) => (
+                  <li key={idx}>
+                    <span>{act.message}</span>
+                    <small>{new Date(act.created_at).toLocaleString("pt-BR")}</small>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>Nenhuma atividade recente registrada.</p>
+            )}
+          </div>
+        </>
+      )}
+    </div>
   );
 };
 

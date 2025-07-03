@@ -9,6 +9,23 @@
   margin-bottom: 20px;
 }
 
+.btnPrimary {
+  padding: 10px 15px;
+  background-color: #808080;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: background-color 0.3s;
+}
+
+.btnPrimary:hover {
+  background-color: #2980b9;
+}
+
 @media (max-width: 768px) {
   .sectionHeader {
     flex-direction: column;

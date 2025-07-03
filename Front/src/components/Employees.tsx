@@ -11,7 +11,7 @@ const Employees: React.FC<EmployeesProps> = ({ onAdd }) => (
   <section id="funcionarios" className={styles.tabContent}>
     <div className={styles.sectionHeader}>
       <h2>Funcionários</h2>
-      <button className="btn-primary" onClick={onAdd}>
+      <button className={styles.btnPrimary} onClick={onAdd}>
         <i className="fas fa-plus"></i> Adicionar Funcionário
       </button>
     </div>

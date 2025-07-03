@@ -1,31 +1,41 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styles from './Sidebar.module.css';
+import { NavLink } from 'react-router-dom';
 
-const Sidebar: React.FC = () => {
-  const [open, setOpen] = useState(false);
+interface SidebarProps {
+  open: boolean;
+  onClose: () => void;
+}
 
-  const toggleMenu = () => setOpen(!open);
+const links = [
+  { to: '/', icon: 'fas fa-tachometer-alt', label: 'Dashboard' },
+  { to: '/funcionarios', icon: 'fas fa-user-alt', label: 'Funcionários' },
+  { to: '/departamentos', icon: 'fas fa-building', label: 'Departamentos' },
+  { to: '/cargos', icon: 'fas fa-briefcase', label: 'Cargos' },
+  { to: '/payroll', icon: 'fas fa-invoice-dollar', label: 'Folha de Pagamento' },
+];
+
+const Sidebar: React.FC<SidebarProps> = ({ open, onClose }) => {
+  const handleLinkClick = () => onClose();
 
   return (
-    <>
-      <button className={styles.hamburger} onClick={toggleMenu} aria-label="Menu">
-        <div className={open ? styles.bar1Active : styles.bar1}></div>
-        <div className={open ? styles.bar2Active : styles.bar2}></div>
-        <div className={open ? styles.bar3Active : styles.bar3}></div>
-      </button>
-      <nav className={`${styles.sidebar} ${open ? styles.open : ''}`}>
-        <ul>
-          <li className={styles.active}><a href="#dashboard"><i className="fas fa-tachometer-alt"></i> Dashboard</a></li>
-          <li><a href="#funcionarios"><i className="fas fa-user-tie"></i> Funcionários</a></li>
-          <li><a href="#departamentos"><i className="fas fa-building"></i> Departamentos</a></li>
-          <li><a href="#cargos"><i className="fas fa-briefcase"></i> Cargos</a></li>
-          <li><a href="#folha"><i className="fas fa-file-invoice-dollar"></i> Folha de Pagamento</a></li>
-          <li><a href="#beneficios"><i className="fas fa-hand-holding-heart"></i> Benefícios</a></li>
-          <li><a href="#relatorios"><i className="fas fa-chart-bar"></i> Relatórios</a></li>
-          <li><a href="#configuracoes"><i className="fas fa-cog"></i> Configurações</a></li>
-        </ul>
-      </nav>
-    </>
+    <nav className={`${styles.sidebar} ${open ? styles.open : ''}`}>
+      <ul>
+        {links.map(({ to, icon, label }) => (
+          <li key={to} className={styles.linkWrapper}>
+            <NavLink
+              to={to}
+              onClick={handleLinkClick}
+              className={({ isActive }) =>
+                isActive ? `${styles.link} ${styles.active}` : styles.link
+              }
+            >
+              <i className={icon}></i> {label}
+            </NavLink>
+          </li>
+        ))}
+      </ul>
+    </nav>
   );
 };
 

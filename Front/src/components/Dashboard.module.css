@@ -1,8 +1,4 @@
 .tabContent {
-  display: none;
-}
-
-.tabContent.active {
   display: block;
 }
 
@@ -13,26 +9,6 @@
   margin-bottom: 30px;
 }
 
-.statCard {
-  background-color: white;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  text-align: center;
-}
-
-.statCard h3 {
-  font-size: 1rem;
-  color: #7f8c8d;
-  margin-bottom: 10px;
-}
-
-.statCard p {
-  font-size: 2rem;
-  font-weight: bold;
-  color: #2c3e50;
-}
-
 .recentActivity {
   background-color: white;
   padding: 20px;
@@ -40,23 +16,18 @@
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.recentActivity h3 {
+.recentActivityTitle {
   margin-bottom: 15px;
 }
 
-.recentActivity ul {
+.recentActivityList {
   list-style: none;
+  padding: 0;
 }
 
-.recentActivity li {
+.recentActivityList li {
   padding: 10px 0;
   border-bottom: 1px solid #eee;
   display: flex;
   justify-content: space-between;
-}
-
-@media (max-width: 768px) {
-  .statsContainer {
-    grid-template-columns: 1fr;
-  }
 }

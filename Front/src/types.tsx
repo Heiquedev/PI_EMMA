@@ -20,3 +20,9 @@ export interface Employee {
     employment_status: string;
     position?: Position;
   }
+  
+export interface DashboardData {
+    totalEmployees: number;
+    pendingVacations: number;
+    birthdays: number;
+  }

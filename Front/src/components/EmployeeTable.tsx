@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import styles from './EmployeeTable.module.css'
 import type { Employee } from '../types';
+import { Link } from 'react-router';
 
 const EmployeeTable: React.FC = () => {
   const [employees, setEmployees] = useState<Employee[]>([]);
@@ -48,6 +49,7 @@ const EmployeeTable: React.FC = () => {
                 <td>{departmentName}</td>
                 <td>{positionTitle}</td>
                 <td>{emp.hire_date ? emp.hire_date.split('T')[0].split('-').reverse().join('/') : '—'}</td>
+                <Link to={`/employees/${emp.id}`} className={styles.viewButton}>Ver / Editar</Link>
               </tr>
             );
           })}

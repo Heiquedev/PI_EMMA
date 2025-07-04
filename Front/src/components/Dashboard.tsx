@@ -51,9 +51,9 @@ const Dashboard: React.FC = () => {
       <h2>Dashboard</h2>
 
       {loading ? (
-        <p>Carregando glória...</p>
+        <p>Carregando dados...</p>
       ) : error ? (
-        <p>Falha ao conectar-se ao trono. Verifique o servidor.</p>
+        <p>Falha ao conectar-se. Verifique o servidor.</p>
       ) : (
         <>
           {/* Estatísticas principais */}

@@ -7,6 +7,7 @@ import Employees from './components/Employees';
 import EmployeeModal from './components/EmployeeModal';
 import styles from './App.module.css';
 import ListDepartament from './components/ListDepartaments';
+import EmployeeDetails from './components/EmployeeDetails';
 
 const App: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
@@ -28,6 +29,7 @@ const App: React.FC = () => {
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/funcionarios" element={<Employees onAdd={() => setShowModal(true)} />} />
+          <Route path="/employees/:id" element={<EmployeeDetails />} />
           <Route path="/departamentos" element={<ListDepartament/>}/>
           {/* Coloque mais rotas aqui conforme criar outras seções */}
         </Routes>

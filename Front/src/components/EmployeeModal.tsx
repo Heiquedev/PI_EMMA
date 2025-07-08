@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styles from './EmployeeModal.module.css'
 import { useEffect } from "react";
 import axios from 'axios';
+import type { EmployeeM } from "../types";
 
 interface EmployeeModalProps {
   visible: boolean;
@@ -18,14 +19,23 @@ interface Position {
   title: string,
   description?: string,
 }
+
 const EmployeeModal: React.FC<EmployeeModalProps> = ({ visible, onClose }) => {
 
   const [loading, setLoading] = useState(true);
-  const [name, setName] = useState('');
-  const [lastname, setLastname] = useState('');
-  const [email, setEmail] = useState('');
   const [department, setDepartment] = useState<Department[]>([]);
   const [position, setPosition] = useState<Position[]>([]);
+  const [employee, setEmployee] = useState<EmployeeM>({
+    firstName: '',
+    lastName: '',
+    cpf: '',
+    rg: '',
+    email: '',
+    phone: '',
+    department: '',
+    position: '',
+    hireDate: ''
+  });
   const [err, setError] = useState(false);
 
   useEffect(() => {
@@ -63,21 +73,29 @@ const EmployeeModal: React.FC<EmployeeModalProps> = ({ visible, onClose }) => {
         <h2>Adicionar Novo Funcionário</h2>
         <form>
           <div className={styles.formGroup}>
-            <label>Nome Completo</label>
-            <input type="text" />
+            <label>Nome</label>
+            <input type="text" value={employee.firstName} />
+          </div>
+          <div className={styles.formGroup}>
+            <label>Sobrenome</label>
+            <input type="text" value={employee.lastName} />
+          </div>
+          <div className={styles.formGroup}>
+            <label>CPF</label>
+            <input type="text" value={employee.cpf} />
           </div>
           <div className={styles.formGroup}>
             <label>Email</label>
-            <input type="text" />
+            <input type="text" value={employee.email} />
           </div>
           <div className={styles.formGroup}>
             <label>Departamento</label>
             <select id="employee-department" required>
-              <option value="">Selecione...</option>
+              <option value={employee.department}>Selecione...</option>
               {loading ? (
                 <p>Carregando...</p>
               ) : err ? (
-                <p>Falha ao conectar-se ao trono. Verifique o servidor.</p>
+                <p>Falha ao conectar-se à API. Verifique o servidor.</p>
               ) : <>
                 {department.map(dep => {
                   return (
@@ -91,11 +109,11 @@ const EmployeeModal: React.FC<EmployeeModalProps> = ({ visible, onClose }) => {
           <div className={styles.formGroup}>
             <label>Cargo</label>
             <select name="" id="employee-position" required>
-              <option value="">Selecione...</option>
+              <option value={employee.position}>Selecione...</option>
               {loading ? (
                 <p>Carregando...</p>
               ) : err ? (
-                <p>Falha ao conectar-se ao trono. Verifique o servidor.</p>
+                <p>Falha ao conectar-se à API. Verifique o servidor.</p>
               ) : <>
                 {position.map(pos => {
                   return (
@@ -107,70 +125,16 @@ const EmployeeModal: React.FC<EmployeeModalProps> = ({ visible, onClose }) => {
             </select>
           </div>
           <div className={styles.formGroup}>
-            <label>Salário</label>
-            <input type="number" />
-          </div>
-          <div className={styles.formGroup}>
             <label>Data de Admissão</label>
-            <input type="date" />
+            <input type="date" value={employee.hireDate} />
           </div>
           {/* Outras entradas aqui... */}
-          <button type="submit" className={styles.btnPrimary} onSubmit={}>Salvar</button>
+          <button type="submit" className={styles.btnPrimary} onChange={}>Salvar</button>
         </form>
       </div>
     </div>
   );
 }
-
-const [nome, setNome] = useState('');
-const [email, setEmail] = useState('');
-
-const handleSubmit = (e: React.FormEvent) => {
-  e.preventDefault(); // impede o recarregamento da página
-
-  const dados = {
-    nome,
-    email,
-  };
-
-  // Envia para a API (altere a URL para o seu endpoint real)
-  axios.post('http://localhost:8000/api/usuarios', dados)
-    .then(response => {
-      console.log('Dados enviados com sucesso:', response.data);
-      // Limpa o formulário, se quiser
-      setNome('');
-      setEmail('');
-    })
-    .catch(error => {
-      console.error('Erro ao enviar dados:', error);
-    });
-};
-
-return (
-  <form onSubmit={handleSubmit}>
-    <label>
-      Nome:
-      <input type="text" value={nome} onChange={e => setNome(e.target.value)} required />
-    </label>
-    <br />
-    <label>
-      Email:
-      <input type="email" value={email} onChange={e => setEmail(e.target.value)} required />
-    </label>
-    <br />
-    <button type="submit">Enviar</button>
-  </form>
-);
-};
-
-
-
-
-
-
-
-
-
-
+  ;
 
 export default EmployeeModal;

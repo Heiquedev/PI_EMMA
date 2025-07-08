@@ -11,14 +11,17 @@ export interface Position {
   department?: Department;
 }
 
-export interface Employee {
-  id: number;
-  first_name: string;
-  last_name: string;
-  hire_date: string;
-  employeePhone: string;
-  employment_status: string;
-  position?: Position;
+export interface EmployeeM {
+  firstName: string,
+  lastName: string,
+  cpf: string,
+  rg: string,
+  email: string,
+  phone: string,
+  department: string,
+  position: string,
+  hireDate:  string
+
 }
 
 export interface DashboardData {

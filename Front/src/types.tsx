@@ -14,6 +14,7 @@ export interface Position {
 export interface EmployeeM {
   firstName: string,
   lastName: string,
+  birthdate: string,
   cpf: string,
   rg: string,
   email: string,

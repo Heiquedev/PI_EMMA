@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styles from './EmployeeModal.module.css'
 import { useEffect } from "react";
-import axios from 'axios';
+import axios from "axios";
 import type { EmployeeM } from "../types";
 
 interface EmployeeModalProps {
@@ -41,25 +41,13 @@ const EmployeeModal: React.FC<EmployeeModalProps> = ({ visible, onClose }) => {
   const [errors, setErrors] = useState<Partial<EmployeeM>>({});
   const [submitted, setSubmitted] = useState(false);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setEmployee(employee => ({ ...employee, [name]: value }));
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    setEmployee(employee => ({ ...employee, [e.target.name]: e.target.value }));
   }
 
 
-  const handleSubmit = (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-
-
-    try{
-      const response = await axios.post('https://127.0.0.1:8000/api/employees/save', employee)
-      console.log('Reposta da API:', response.data);
-      
-    }catch(error){
-      console.error('Erro ao enviar o formulário', error);
-      
-    }
 
     const validationErrors: Partial<EmployeeM> = {};
 
@@ -69,15 +57,33 @@ const EmployeeModal: React.FC<EmployeeModalProps> = ({ visible, onClose }) => {
     if (!employee.rg.trim()) validationErrors.rg = 'RG é obrigatório.';
     if (!employee.email.includes('@')) validationErrors.email = 'E-mail inválido.';
     if (!employee.phone.trim()) validationErrors.phone = 'Número de telefone inválido';
-    if (!employee.department) validationErrors.department = 'Departamento é obrigatório.';
-    if (!employee.position) validationErrors.position = 'Cargo é obrigatório.';
-    if (!employee.hireDate) validationErrors.hireDate = 'Data de contratação é obrigatória.';
+    if (!employee.department.trim()) validationErrors.department = 'Departamento é obrigatório.';
+    if (!employee.position.trim()) validationErrors.position = 'Cargo é obrigatório.';
+    if (!employee.hireDate.trim()) validationErrors.hireDate = 'Data de contratação é obrigatória.';
 
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       setSubmitted(false);
       return;
+    }
 
+    try {
+      await axios.post('https://127.0.0.1:8000/api/employees', employee)
+      setEmployee({
+        firstName: ``,
+        lastName: ``,
+        birthdate: ``,
+        cpf: ``,
+        rg: ``,
+        email: ``,
+        phone: ``,
+        department: ``,
+        position: ``,
+        hireDate: ``
+      })
+
+    } catch (error) {
+      console.error('Erro ao enviar o formulário', error);
     }
   };
 
@@ -114,34 +120,34 @@ const EmployeeModal: React.FC<EmployeeModalProps> = ({ visible, onClose }) => {
           &times;
         </span>
         <h2>Adicionar Novo Funcionário</h2>
-        <form onSubmit={handleChange}>
+        <form onSubmit={handleSubmit}>
           <div className={styles.formGroup}>
             <label>Nome</label>
-            <input type="text" name="firstName" value={employee.firstName} onChange={handleChange} />
+            <input type="text" name="firstName" value={employee.firstName} onChange={handleChange} required />
           </div>
           <div className={styles.formGroup}>
             <label>Sobrenome</label>
-            <input type="text" name="lastName" value={employee.lastName} onChange={handleChange} />
+            <input type="text" name="lastName" value={employee.lastName} onChange={handleChange} required />
           </div>
           <div className={styles.formGroup}>
             <label>Data de nascimento</label>
-            <input type="date" name="birthdate" value={employee.birthdate} onChange={handleChange} />
+            <input type="date" name="birthdate" value={employee.birthdate} onChange={handleChange} required />
           </div>
           <div className={styles.formGroup}>
             <label>CPF</label>
-            <input type="text" name="cpf" value={employee.cpf} onChange={handleChange} />
+            <input type="text" name="cpf" value={employee.cpf} onChange={handleChange} required />
           </div>
           <div className={styles.formGroup}>
             <label>RG</label>
-            <input type="text" name="rg" value={employee.rg} onChange={handleChange} />
+            <input type="text" name="rg" value={employee.rg} onChange={handleChange} required />
           </div>
           <div className={styles.formGroup}>
             <label>Email</label>
-            <input type="text" name="phone" value={employee.phone} onChange={handleChange} />
+            <input type="text" name="email" value={employee.email} onChange={handleChange} required />
           </div>
           <div className={styles.formGroup}>
             <label>Telefone</label>
-            <input type="text" name="email" value={employee.email} onChange={handleChange} />
+            <input type="text" name="phone" value={employee.phone} onChange={handleChange} required />
           </div>
           <div className={styles.formGroup}>
             <label>Departamento</label>
@@ -154,7 +160,7 @@ const EmployeeModal: React.FC<EmployeeModalProps> = ({ visible, onClose }) => {
               ) : <>
                 {department.map(dep => {
                   return (
-                    <option value={dep.id}>{dep.department}</option>
+                    <option key={dep.id} value={dep.id}>{dep.department}</option>
                   )
                 })}
               </>
@@ -172,7 +178,7 @@ const EmployeeModal: React.FC<EmployeeModalProps> = ({ visible, onClose }) => {
               ) : <>
                 {position.map(pos => {
                   return (
-                    <option value={pos.id}>{pos.title}</option>
+                    <option key={pos.id} value={pos.id}>{pos.title}</option>
                   )
                 })}
               </>
@@ -181,7 +187,7 @@ const EmployeeModal: React.FC<EmployeeModalProps> = ({ visible, onClose }) => {
           </div>
           <div className={styles.formGroup}>
             <label>Data de Admissão</label>
-            <input type="date" name="hireDate" value={employee.hireDate} />
+            <input type="date" name="hireDate" value={employee.hireDate} onChange={handleChange} required />
           </div>
           {/* Outras entradas aqui... */}
           <button type="submit" className={styles.btnPrimary}>Salvar</button>

@@ -19,6 +19,12 @@
     border-bottom: 1px solid #eee;
     font-size: 0.95rem;
   }
+
+  .table tr
+  ,.table th{
+    width: 20%;
+    height: 10%;
+  }
   
   .table th {
     background-color: #808080;

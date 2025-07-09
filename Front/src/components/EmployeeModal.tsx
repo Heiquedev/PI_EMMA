@@ -1,200 +1,171 @@
-import React, { useState } from "react";
-import styles from './EmployeeModal.module.css'
-import { useEffect } from "react";
-import axios from "axios";
-import type { EmployeeM } from "../types";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import styles from './EmployeeModal.module.css';
+import type { Position, Employee } from '../types';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface EmployeeModalProps {
   visible: boolean;
   onClose: () => void;
 }
 
-interface Department {
-  id: number,
-  department: string,
-  description?: string,
-}
-interface Position {
-  id: number,
-  title: string,
-  description?: string,
-}
+const initialState: Employee = {
+  id: 0,
+  first_name: '',
+  last_name: '',
+  email: '',
+  cpf: '',
+  rg: '',
+  phone: '',
+  hire_date: '',
+  absence: 0,
+  date_of_birth: '',
+  description: '',
+  city: '',
+  position_id: 0,
+  employment_status: 'active',
+};
 
 const EmployeeModal: React.FC<EmployeeModalProps> = ({ visible, onClose }) => {
-
-  const [loading, setLoading] = useState(true);
-  const [department, setDepartment] = useState<Department[]>([]);
-  const [position, setPosition] = useState<Position[]>([]);
-  const [employee, setEmployee] = useState<EmployeeM>({
-    firstName: ``,
-    lastName: ``,
-    birthdate: ``,
-    cpf: ``,
-    rg: ``,
-    email: ``,
-    phone: ``,
-    department: ``,
-    position: ``,
-    hireDate: ``
-  });
-  const [err, setError] = useState(false);
-  const [errors, setErrors] = useState<Partial<EmployeeM>>({});
-  const [submitted, setSubmitted] = useState(false);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setEmployee(employee => ({ ...employee, [e.target.name]: e.target.value }));
-  }
-
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-
-    const validationErrors: Partial<EmployeeM> = {};
-
-    if (!employee.firstName.trim()) validationErrors.firstName = 'Nome é obrigatório.';
-    if (!employee.lastName.trim()) validationErrors.lastName = 'Sobrenome é obrigatório.';
-    if (!employee.cpf.trim()) validationErrors.cpf = 'CPF é obrigatório.';
-    if (!employee.rg.trim()) validationErrors.rg = 'RG é obrigatório.';
-    if (!employee.email.includes('@')) validationErrors.email = 'E-mail inválido.';
-    if (!employee.phone.trim()) validationErrors.phone = 'Número de telefone inválido';
-    if (!employee.department.trim()) validationErrors.department = 'Departamento é obrigatório.';
-    if (!employee.position.trim()) validationErrors.position = 'Cargo é obrigatório.';
-    if (!employee.hireDate.trim()) validationErrors.hireDate = 'Data de contratação é obrigatória.';
-
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      setSubmitted(false);
-      return;
-    }
-
-    try {
-      await axios.post('https://127.0.0.1:8000/api/employees', employee)
-      setEmployee({
-        firstName: ``,
-        lastName: ``,
-        birthdate: ``,
-        cpf: ``,
-        rg: ``,
-        email: ``,
-        phone: ``,
-        department: ``,
-        position: ``,
-        hireDate: ``
-      })
-
-    } catch (error) {
-      console.error('Erro ao enviar o formulário', error);
-    }
-  };
+  const [employee, setEmployee] = useState<Employee>(initialState);
+  const [positions, setPositions] = useState<Position[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    axios.get('http://localhost:8000/api/departments')
-      .then(res => {
-        setDepartment(res.data.data)
-      })
-      .catch((err) => {
-        console.error("Falha ao buscar dados da API:", err);
-        setError(true);
-      })
-      .finally(() => setLoading(false));
-  }, [])
+    if (visible) setEmployee(initialState);
+  }, [visible]);
 
   useEffect(() => {
     axios.get('http://localhost:8000/api/positions')
-      .then(res => {
-        setPosition(res.data.data)
-      })
-      .catch((err) => {
-        console.error("Falha ao buscar dados da API:", err);
-        setError(true);
-      })
-      .finally(() => setLoading(false));
-  }, [])
+      .then(response => setPositions(response.data.data))
+      .catch(() => toast.error('Erro ao carregar cargos'));
+  }, []);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setEmployee(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      await axios.post('http://localhost:8000/api/employees', employee);
+      toast.success('Funcionário cadastrado com sucesso!');
+      onClose();
+    } catch (error: any) {
+      if (error.response?.status === 422) {
+        const errors = error.response.data.errors;
+        if (errors) {
+          Object.values(errors).forEach((msg: any) => toast.error(msg as string));
+        } else {
+          toast.error('Dados inválidos. Verifique os campos e tente novamente.');
+        }
+      } else if (error.response?.status === 500) {
+        toast.error('Erro interno no servidor. Tente novamente mais tarde.');
+      } else {
+        toast.error('Erro ao criar funcionário. Verifique sua conexão.');
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   if (!visible) return null;
 
   return (
-    <div className={styles.modal} onClick={onClose}>
-      <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
-        <span className={styles.closeModal} onClick={onClose}>
-          &times;
-        </span>
-        <h2>Adicionar Novo Funcionário</h2>
-        <form onSubmit={handleSubmit}>
-          <div className={styles.formGroup}>
-            <label>Nome</label>
-            <input type="text" name="firstName" value={employee.firstName} onChange={handleChange} required />
-          </div>
-          <div className={styles.formGroup}>
-            <label>Sobrenome</label>
-            <input type="text" name="lastName" value={employee.lastName} onChange={handleChange} required />
-          </div>
-          <div className={styles.formGroup}>
-            <label>Data de nascimento</label>
-            <input type="date" name="birthdate" value={employee.birthdate} onChange={handleChange} required />
-          </div>
-          <div className={styles.formGroup}>
-            <label>CPF</label>
-            <input type="text" name="cpf" value={employee.cpf} onChange={handleChange} required />
-          </div>
-          <div className={styles.formGroup}>
-            <label>RG</label>
-            <input type="text" name="rg" value={employee.rg} onChange={handleChange} required />
-          </div>
-          <div className={styles.formGroup}>
-            <label>Email</label>
-            <input type="text" name="email" value={employee.email} onChange={handleChange} required />
-          </div>
-          <div className={styles.formGroup}>
-            <label>Telefone</label>
-            <input type="text" name="phone" value={employee.phone} onChange={handleChange} required />
-          </div>
-          <div className={styles.formGroup}>
-            <label>Departamento</label>
-            <select name="department" id="employee-department" value={employee.department} onChange={handleChange} required>
-              <option >Selecione...</option>
-              {loading ? (
-                <p>Carregando...</p>
-              ) : err ? (
-                <p>Falha ao conectar-se à API. Verifique o servidor.</p>
-              ) : <>
-                {department.map(dep => {
-                  return (
-                    <option key={dep.id} value={dep.id}>{dep.department}</option>
-                  )
-                })}
-              </>
-              }
-            </select>
-          </div>
-          <div className={styles.formGroup}>
-            <label>Cargo</label>
-            <select name="position" id="employee-position" value={employee.position} onChange={handleChange} required>
-              <option >Selecione...</option>
-              {loading ? (
-                <p>Carregando...</p>
-              ) : err ? (
-                <p>Falha ao conectar-se à API. Verifique o servidor.</p>
-              ) : <>
-                {position.map(pos => {
-                  return (
+    <>
+      <ToastContainer />
+      <div className={styles.modalOverlay}>
+        <div className={styles.modal}>
+          <h2>Novo Funcionário</h2>
+          <form onSubmit={handleSubmit}>
+            <div className={styles.grid}>
+              <div className={styles.formGroup}>
+                <label>Nome</label>
+                <input type="text" name="first_name" value={employee.first_name} onChange={handleChange} required />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label>Sobrenome</label>
+                <input type="text" name="last_name" value={employee.last_name} onChange={handleChange} required />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label>Email</label>
+                <input type="email" name="email" value={employee.email} onChange={handleChange} required />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label>CPF</label>
+                <input type="text" name="cpf" value={employee.cpf} onChange={handleChange} required />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label>RG</label>
+                <input type="text" name="rg" value={employee.rg} onChange={handleChange} />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label>Telefone</label>
+                <input type="text" name="phone" value={employee.phone} onChange={handleChange} />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label>Data de Admissão</label>
+                <input type="date" name="hire_date" value={employee.hire_date} onChange={handleChange} required />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label>Data de Nascimento</label>
+                <input type="date" name="date_of_birth" value={employee.date_of_birth} onChange={handleChange} />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label>Cidade</label>
+                <input type="text" name="city" value={employee.city} onChange={handleChange} />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label>Cargo</label>
+                <select name="position_id" value={employee.position_id} onChange={handleChange} required>
+                  <option value="">Selecione um cargo</option>
+                  {positions.map(pos => (
                     <option key={pos.id} value={pos.id}>{pos.title}</option>
-                  )
-                })}
-              </>
-              }
-            </select>
-          </div>
-          <div className={styles.formGroup}>
-            <label>Data de Admissão</label>
-            <input type="date" name="hireDate" value={employee.hireDate} onChange={handleChange} required />
-          </div>
-          {/* Outras entradas aqui... */}
-          <button type="submit" className={styles.btnPrimary}>Salvar</button>
-        </form>
+                  ))}
+                </select>
+              </div>
+
+              <div className={styles.formGroup}>
+                <label>Status</label>
+                <select name="employment_status" value={employee.employment_status} onChange={handleChange} required>
+                  <option value="active">Ativo</option>
+                  <option value="inactive">Licença</option>
+                  <option value="suspended">Demitido</option>
+                </select>
+              </div>
+
+              <div className={styles.formGroupFull}>
+                <label>Descrição</label>
+                <textarea name="description" value={employee.description} onChange={handleChange} rows={3} />
+              </div>
+            </div>
+
+            <div className={styles.actions}>
+              <button type="button" onClick={onClose} className={styles.cancelButton}>Cancelar</button>
+              <button type="submit" disabled={isSubmitting} className={styles.submitButton}>
+                {isSubmitting ? 'Salvando...' : 'Cadastrar'}
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
+    </>
   );
-}
+};
 
 export default EmployeeModal;

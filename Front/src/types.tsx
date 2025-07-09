@@ -104,7 +104,7 @@ export interface Employee {
   description?: string;
   city?: string;
   position_id: number;
-  employee_status: 'active' | 'on_leave' | 'terminated';
+  employment_status: 'active' | 'on_leave' | 'terminated';
   position?: Position;
   documents?: Document[];
   labor_rights?: LaborRights;

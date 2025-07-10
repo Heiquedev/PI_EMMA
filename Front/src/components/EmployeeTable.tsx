@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import styles from './EmployeeTable.module.css'
+import styles from './EmployeeTable.module.css';
+import { Link } from 'react-router-dom';
 import type { Employee } from '../types';
-import { Link } from 'react-router';
 
 const EmployeeTable: React.FC = () => {
   const [employees, setEmployees] = useState<Employee[]>([]);
@@ -10,18 +10,12 @@ const EmployeeTable: React.FC = () => {
 
   useEffect(() => {
     axios.get('http://localhost:8000/api/employees')
-      .then(response => {
-        setEmployees(response.data.data); // Pegando o array dentro de data
-      })
-      .catch(error => {
-        console.error('Erro ao carregar funcionários:', error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+      .then(response => setEmployees(response.data.data))
+      .catch(error => console.error('Erro ao carregar funcionários:', error))
+      .finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <p>Carregando funcionários...</p>;
+  if (loading) return <p className={styles.loading}>Carregando funcionários...</p>;
 
   return (
     <div className={styles.tableWrapper}>
@@ -38,9 +32,9 @@ const EmployeeTable: React.FC = () => {
         </thead>
         <tbody>
           {employees.map(emp => {
-            // Vai buscar o departamento pelo caminho position -> department, seu lerdo
             const departmentName = emp.position?.department?.department || '—';
             const positionTitle = emp.position?.title || '—';
+            const hireDate = emp.hire_date ? emp.hire_date.split('T')[0].split('-').reverse().join('/') : '—';
 
             return (
               <tr key={emp.id}>
@@ -48,8 +42,12 @@ const EmployeeTable: React.FC = () => {
                 <td>{emp.first_name} {emp.last_name}</td>
                 <td>{departmentName}</td>
                 <td>{positionTitle}</td>
-                <td>{emp.hire_date ? emp.hire_date.split('T')[0].split('-').reverse().join('/') : '—'}</td>
-                <Link to={`/employees/${emp.id}`} className={styles.viewButton}>Ver / Editar</Link>
+                <td>{hireDate}</td>
+                <td>
+                  <Link to={`/employees/${emp.id}`} className={styles.actionButton}>
+                    Ver
+                  </Link>
+                </td>
               </tr>
             );
           })}

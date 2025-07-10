@@ -2,12 +2,64 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import styles from './EmployeeDetails.module.css';
-import type { Employee } from '../types';
+import type { Document, Employee } from '../types';
 
 const EmployeeDetails: React.FC = () => {
     const { id } = useParams();
     const [employee, setEmployee] = useState<Employee | null>(null);
+    const [documents, setDocuments] = useState<Document[]>([]);
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [uploading, setUploading] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    useEffect(() => {
+        axios.get(`http://localhost:8000/api/employees/${id}`)
+            .then(res => {
+                setEmployee(res.data.data);
+                setDocuments(res.data.data.documents || []);
+            })
+            .catch(err => console.error("Erro ao buscar funcionário:", err));
+    }, [id]);
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files.length > 0) {
+            const file = e.target.files[0];
+            if (file.type !== 'application/pdf') {
+                alert('Apenas arquivos PDF são permitidos.');
+                return;
+            }
+            setSelectedFile(file);
+        }
+    };
+
+    const handleUpload = () => {
+        if (!selectedFile) {
+          alert('Selecione um arquivo antes de enviar.');
+          return;
+        }
+    
+        const formData = new FormData();
+        formData.append('document', selectedFile);
+        formData.append('name', selectedFile.name);
+    
+        setUploading(true);
+    
+        axios.post(`http://localhost:8000/api/employees/${id}/documents`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        })
+          .then(res => {
+            setDocuments(prev => [...prev, res.data.data]);
+            setSelectedFile(null);
+            setUploading(false);
+          })
+          .catch(err => {
+            console.error("Erro ao enviar documento:", err);
+            alert('Erro ao enviar o documento.');
+            setUploading(false);
+          });
+      };
 
     useEffect(() => {
         axios.get(`http://localhost:8000/api/employees/${id}`)
@@ -34,7 +86,7 @@ const EmployeeDetails: React.FC = () => {
 
     return (
         <div className={styles.detailsContainer}>
-            <h2>Detalhes do Funcionário</h2>
+            <h2>{employee.first_name} {employee.last_name} - {employee.position?.title}</h2>
             <p><strong>Nome:</strong> {employee.first_name} {employee.last_name}</p>
             <p><strong>Email:</strong> {employee.email}</p>
             <p><strong>Data de Nascimento:</strong> {employee.date_of_birth}</p>
@@ -65,14 +117,31 @@ const EmployeeDetails: React.FC = () => {
 
             {employee.documents && employee.documents.length > 0 && (
                 <div className={styles.section}>
-                    <h3>Documentos</h3>
-                    <ul>
-                        {employee.documents.map(doc => (
-                            <li key={doc.id}><strong>{doc.type}:</strong> {doc.name}</li>
-                        ))}
-                    </ul>
-                </div>
+                <h3>Documentos</h3>
+                <ul>
+                  {documents.map(doc => (
+                    <li key={doc.id}>
+                      <strong>{doc.type}:</strong>{' '}
+                      <a href={`http://localhost:8000/storage/${doc.path}`} target="_blank" rel="noreferrer">
+                        {doc.name}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             )}
+      
+            <div className={styles.section}>
+              <h3>Adicionar Documento (PDF)</h3>
+              <input type="file" accept="application/pdf" onChange={handleFileChange} />
+              <button
+                onClick={handleUpload}
+                disabled={!selectedFile || uploading}
+                style={{ marginLeft: '1rem' }}
+              >
+                {uploading ? 'Enviando...' : 'Enviar'}
+              </button>
+            </div>
 
             {employee.tags && employee.tags.length > 0 && (
                 <div className={styles.section}>

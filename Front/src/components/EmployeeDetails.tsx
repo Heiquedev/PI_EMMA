@@ -20,6 +20,12 @@ const EmployeeDetails: React.FC = () => {
             })
             .catch(err => console.error("Erro ao buscar funcionário:", err));
     }, [id]);
+    
+    const deleteTag = (tagId:number) => {
+        axios.delete(`http://localhost:8000/api/tags/${tagId}/`)
+            .then(() => window.location.reload())
+            .catch(err => console.error("Erro ao deletar tag:", err));
+    }
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
@@ -148,7 +154,7 @@ const EmployeeDetails: React.FC = () => {
                     <h3>Tags</h3>
                     <ul className={styles.tagsList}>
                         {employee.tags.map(tag => (
-                            <li key={tag.id} style={{ backgroundColor: tag.color }}>{tag.content}</li>
+                            <li key={tag.id} style={{ backgroundColor: tag.color }}>{tag.content} <button style={{ backgroundColor: tag.color, border: 'none', color: 'white'}} onClick={() => deleteTag(tag.id)}>X</button></li>
                         ))}
                     </ul>
                 </div>

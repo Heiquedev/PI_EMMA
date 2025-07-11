@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import styles from './EmployeeTable.module.css';
-import type { Employee, Position, Department } from '../types';
-import { Link } from 'react-router';
+import type { Employee, Position, Department, Tag } from '../types';
+import { Link } from 'react-router-dom';
 
 const EmployeeTable: React.FC = () => {
   const [employees, setEmployees] = useState<Employee[]>([]);
@@ -14,13 +14,13 @@ const EmployeeTable: React.FC = () => {
   const [searchName, setSearchName] = useState('');
   const [searchPosition, setSearchPosition] = useState('');
   const [searchDepartment, setSearchDepartment] = useState('');
+  const [searchTag, setSearchTag] = useState('');
 
-  
   useEffect(() => {
     axios.get('http://localhost:8000/api/employees')
-    .then(res => {
-      setEmployees(res.data.data);
-      setFilteredEmployees(res.data.data);
+      .then(res => {
+        setEmployees(res.data.data);
+        setFilteredEmployees(res.data.data);
       });
 
     axios.get('http://localhost:8000/api/departments')
@@ -38,10 +38,11 @@ const EmployeeTable: React.FC = () => {
     const filtered = employees.filter(emp =>
       `${emp.first_name} ${emp.last_name}`.toLowerCase().includes(searchName.toLowerCase()) &&
       (searchPosition === '' || emp.position?.id === parseInt(searchPosition)) &&
-      (searchDepartment === '' || emp.position?.department?.id === parseInt(searchDepartment))
+      (searchDepartment === '' || emp.position?.department?.id === parseInt(searchDepartment)) &&
+      (searchTag === '' || emp.tags?.some(tag => tag.content.toLowerCase().includes(searchTag.toLowerCase())))
     );
     setFilteredEmployees(filtered);
-  }, [searchName, searchPosition, searchDepartment, employees]);
+  }, [searchName, searchPosition, searchDepartment, searchTag, employees]);
 
   return (
     <div className={styles.container}>
@@ -64,6 +65,12 @@ const EmployeeTable: React.FC = () => {
             <option key={dep.id} value={dep.id}>{dep.department}</option>
           ))}
         </select>
+        <input
+          type="text"
+          placeholder="Buscar por tag"
+          value={searchTag}
+          onChange={(e) => setSearchTag(e.target.value)}
+        />
       </div>
 
       <table className={styles.table}>

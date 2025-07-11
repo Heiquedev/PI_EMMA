@@ -4,7 +4,7 @@ import styles from './DepartmentsTable.module.css'
 import type { Department } from '../types';
 import { Link } from 'react-router';
 
-const EmployeeTable: React.FC = () => {
+const DepartmentTable: React.FC = () => {
   const [departments, setDepartments] = useState<Department[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -56,4 +56,4 @@ const EmployeeTable: React.FC = () => {
   );
 };
 
-export default EmployeeTable;
+export default DepartmentTable;

@@ -1,5 +1,4 @@
 import React from 'react';
-import SearchBar from './SearchBar';
 import EmployeeTable from './EmployeeTable';
 import styles from './Employees.module.css';
 
@@ -15,7 +14,6 @@ const Employees: React.FC<EmployeesProps> = ({ onAdd }) => (
         <i className="fas fa-plus"></i> Adicionar Funcionário
       </button>
     </div>
-    <SearchBar />
     <EmployeeTable />
   </section>
 );

@@ -39,10 +39,14 @@ export interface Position {
 
 export interface Document {
   id: number;
+  employee_id: number;
   name: string;
-  type: string;
-  path: string;
+  type: string;      // Ex: 'pdf'
+  path: string;      // Caminho relativo para acessar o arquivo na storage
+  created_at?: string | null;
+  updated_at?: string | null;
 }
+
 
 export interface LaborRights {
   contract_type: string;

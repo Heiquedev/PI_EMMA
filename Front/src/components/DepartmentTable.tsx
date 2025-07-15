@@ -46,7 +46,7 @@ const EmployeeTable: React.FC = () => {
                 <td>{departmentId}</td>
                 <td>{departmentName}</td>
                 <td>{departmentDesc}</td>
-                <Link to={`/departments/${dep.description}`} className={styles.viewButton}>Ver / Editar</Link>
+                <Link to={`/departments/${dep.description}`} className={styles.buttonTable}>Ver</Link>
               </tr>
             );
           })}

@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import styles from './EmployeeDetails.module.css';
 import type { Employee } from '../types';
+import EmployeeModalTags from './EmployeeModalTags';
 
 const EmployeeDetails: React.FC = () => {
     const { id } = useParams();

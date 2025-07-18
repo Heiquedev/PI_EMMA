@@ -8,7 +8,7 @@ interface DepartmentsProps {
 }
 
 const Departments: React.FC<DepartmentsProps> = ({ onAdd }) => (
-  <section id="funcionarios" className={styles.tabContent}>
+  <section id="departamentos" className={styles.tabContent}>
     <div className={styles.sectionHeader}>
       <h2>Departamentos</h2>
       <button className={styles.btnPrimary} onClick={onAdd}>

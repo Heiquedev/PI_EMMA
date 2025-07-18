@@ -1,54 +1,19 @@
 .tableWrapper {
-<<<<<<< HEAD
   overflow-x: auto;
-=======
-  width: 100%;
-  padding: 0;
-  margin: 0 auto;
-  overflow-x: auto;
-  box-sizing: border-box;
->>>>>>> f2bff93ddf34143e34b816e789510ab3c3539cac
 }
 
 .table {
   width: 100%;
-<<<<<<< HEAD
   border-collapse: separate;
   border-spacing: 0;
   background-color: #fff;
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-=======
-  border-collapse: collapse;
-  background-color: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  overflow: hidden;
-  min-width: 800px;
->>>>>>> f2bff93ddf34143e34b816e789510ab3c3539cac
 }
 
 .table th,
 .table td {
-<<<<<<< HEAD
-  padding: 16px 20px;
-  text-align: left;
-  border-bottom: 1px solid #eee;
-  font-size: 0.95rem;
-}
-
-.table tr
-,.table th{
-  width: 20%;
-  height: 10%;
-}
-
-.table th {
-  background-color: #7834fc;
-  color: white;
-  font-weight: 600;
-=======
   padding: 14px 16px;
   text-align: left;
   border-bottom: 1px solid #f0f0f0;
@@ -61,7 +26,6 @@
   color: #fff;
   font-weight: 600;
   text-transform: uppercase;
->>>>>>> f2bff93ddf34143e34b816e789510ab3c3539cac
 }
 
 .table tr:hover {
@@ -74,21 +38,6 @@
   gap: 8px;
 }
 
-<<<<<<< HEAD
-.button {
-  padding: 6px 12px;
-  border: none;
-  border-radius: 6px;
-  background-color: #808080;
-  color: white;
-  cursor: pointer;
-  font-size: 0.85rem;
-  transition: background-color 0.2s ease;
-}
-
-.button:hover {
-  background-color: #2980b9;
-=======
 .viewButton {
   padding: 6px 10px;
   font-size: 0.85rem;
@@ -178,7 +127,6 @@
     text-align: center;
     padding: 8px;
   }
->>>>>>> f2bff93ddf34143e34b816e789510ab3c3539cac
 }
 
 .buttonTable {

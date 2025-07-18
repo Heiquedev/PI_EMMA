@@ -61,12 +61,12 @@ const EmployeeModalTags: React.FC<EmployeeModalTagsProps> = ({ visible, onClose 
   if (!visible) return null;
 
   return (
-    <div style={styles.modal}>
-      <h2 style={styles.title}>Criar Tag</h2>
-      <form style={styles.form} onSubmit={handleSubmit}>
-        <label style={styles.subtitle}>Nome</label>
+    <div className={styles.modal}>
+      <h2 className={styles.title}>Criar Tag</h2>
+      <form className={styles.form} onSubmit={handleSubmit}>
+        <label className={styles.subtitle}>Nome</label>
         <input value={tag.content} title='' required/>
-        <label style={styles.subtitle}>Cor</label>
+        <label className={styles.subtitle}>Cor</label>
         <select name="" id="">
           <option value=""></option>
         </select>

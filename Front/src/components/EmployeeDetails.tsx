@@ -2,12 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import styles from './EmployeeDetails.module.css';
-<<<<<<< HEAD
-import type { Employee } from '../types';
-import EmployeeModalTags from './EmployeeModalTags';
-=======
 import type { Document, Employee } from '../types';
->>>>>>> f2bff93ddf34143e34b816e789510ab3c3539cac
 
 const EmployeeDetails: React.FC = () => {
     const { id } = useParams();

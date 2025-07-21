@@ -1,42 +1,53 @@
-import React, { useState } from 'react';
-import { Routes, Route } from 'react-router-dom';
-import Header from './components/Header';
-import Sidebar from './components/Sidebar';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import Login from './Auth/Login';
+import Register from './Auth/Register';
+import MainLayout from './layout/MainLayout';
 import Dashboard from './components/Dashboard';
 import Employees from './components/Employees';
-import EmployeeModal from './components/EmployeeModal';
-import styles from './App.module.css';
-import DepartmentTable from './components/DepartmentTable';
-import EmployeeDetails from './components/EmployeeDetails';
+import { useAuth } from './context/AuthContext';
 
-const App: React.FC = () => {
-  const [showModal, setShowModal] = useState(false);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+const App = () => {
+  const { isAuthenticated, loading } = useAuth();
 
-  const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
-  const closeSidebar = () => setSidebarOpen(false);
+  if (loading) {
+    return <div>Carregando...</div>;
+  }
 
   return (
-    <div className={styles.container}>
-      <Header toggleSidebar={toggleSidebar} />
-      <Sidebar open={sidebarOpen} onClose={closeSidebar} />
-      <main
-        className={styles.content}
-        onClick={() => {
-          if (window.innerWidth <= 768) closeSidebar();
-        }}
-      >
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/funcionarios" element={<Employees onAdd={() => setShowModal(true)} />} />
-          <Route path="/employees/:id" element={<EmployeeDetails />} />
-          <Route path="/departamentos" element={<DepartmentTable/>}/>
-          <Route path="/cargos" element={<DepartmentTable/>}/>
-          {/* Coloque mais rotas aqui conforme criar outras seções */}
-        </Routes>
-      </main>
-      <EmployeeModal visible={showModal} onClose={() => setShowModal(false)} />
-    </div>
+    <Routes>
+      {/* Autenticação (sem layout) */}
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+
+      {/* Protegido (com layout) */}
+      <Route
+        path="/dashboard"
+        element={
+          isAuthenticated ? (
+            <MainLayout>
+              <Dashboard />
+            </MainLayout>
+          ) : (
+            <Navigate to="/login" replace />
+          )
+        }
+      />
+      <Route
+        path="/employees"
+        element={
+          isAuthenticated ? (
+            <MainLayout>
+              <Employees onAdd={() => { }} />
+            </MainLayout>
+          ) : (
+            <Navigate to="/login" replace />
+          )
+        }
+      />
+
+      {/* Redirecionamento padrão */}
+      <Route path="*" element={<Navigate to="/dashboard" />} />
+    </Routes>
   );
 };
 

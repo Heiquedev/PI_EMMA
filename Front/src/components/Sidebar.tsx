@@ -8,10 +8,10 @@ interface SidebarProps {
 }
 
 const links = [
-  { to: '/', icon: 'fas fa-tachometer-alt', label: 'Dashboard' },
-  { to: '/funcionarios', icon: 'fas fa-user-alt', label: 'Funcionários' },
-  { to: '/departamentos', icon: 'fas fa-building', label: 'Departamentos' },
-  { to: '/cargos', icon: 'fas fa-briefcase', label: 'Cargos' },
+  { to: '/dashboard', icon: 'fas fa-tachometer-alt', label: 'Dashboard' },
+  { to: '/employees', icon: 'fas fa-user-alt', label: 'Funcionários' },
+  { to: '/departments', icon: 'fas fa-building', label: 'Departamentos' },
+  { to: '/positions', icon: 'fas fa-briefcase', label: 'Cargos' },
   { to: '/payroll', icon: 'fas fa-invoice-dollar', label: 'Folha de Pagamento' },
 ];
 

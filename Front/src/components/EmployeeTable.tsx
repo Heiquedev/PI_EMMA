@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import styles from './EmployeeTable.module.css';
 import type { Employee, Position, Department, Tag } from '../types';
 import { Link } from 'react-router-dom';
+import api from '../services/api';
 
 const EmployeeTable: React.FC = () => {
   const [employees, setEmployees] = useState<Employee[]>([]);
@@ -17,18 +17,18 @@ const EmployeeTable: React.FC = () => {
   const [searchTag, setSearchTag] = useState('');
 
   useEffect(() => {
-    axios.get('http://localhost:8000/api/employees')
+    api.get('http://localhost:8000/api/employees')
       .then(res => {
         setEmployees(res.data.data);
         setFilteredEmployees(res.data.data);
       });
 
-    axios.get('http://localhost:8000/api/departments')
+    api.get('http://localhost:8000/api/departments')
       .then(res => {
         setDepartments(res.data.data);
       });
 
-    axios.get('http://localhost:8000/api/positions')
+    api.get('http://localhost:8000/api/positions')
       .then(res => {
         setPositions(res.data.data);
       });

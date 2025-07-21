@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styles from './Dashboard.module.css';
-import axios from 'axios';
-import {
-  BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer
-} from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import api from '../services/api';
 
 interface Stats {
   total_employees: number;
@@ -24,7 +22,7 @@ const Dashboard: React.FC = () => {
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    axios.get('http://localhost:8000/api/dashboard')
+    api.get('http://localhost:8000/api/dashboard')
       .then((response) => {
         setStats(response.data.stats ?? {
           total_employees: 0,

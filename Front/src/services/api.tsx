@@ -12,6 +12,7 @@ const api = axios.create({
     baseURL: 'http://localhost:8000',
     withCredentials: true, // essencial para que os cookies sejam enviados
     headers: {
+        'Cache-Control': 'no-cache',
         'X-Requested-With': 'XMLHttpRequest',
     }
 });

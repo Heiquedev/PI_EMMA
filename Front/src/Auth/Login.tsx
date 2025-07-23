@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styles from './Auth.module.css';
 import { useAuth } from '../context/AuthContext';
@@ -8,9 +8,16 @@ const Login: React.FC = () => {
     const [password, setPassword] = useState('');
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
+    const { isAuthenticated } = useAuth();
 
     const navigate = useNavigate();
     const { login } = useAuth();
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            navigate('/dashboard');
+        }
+    }, [isAuthenticated, navigate]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -20,7 +27,6 @@ const Login: React.FC = () => {
         try {
             await login(email, password);
             console.log('Login bem-sucedido. Redirecionando...');
-            navigate('/dashboard');
         } catch (error: any) {
             const response = error?.response;
 

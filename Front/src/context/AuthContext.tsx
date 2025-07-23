@@ -23,9 +23,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const fetchUser = async () => {
         try {
-            const res = await api.get('http://localhost:8000/api/user', {
-                withCredentials: true,
-            });
+            const res = await api.get('/user');
             setUser(res.data);
         } catch {
             setUser(null);
@@ -35,21 +33,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     const login = async (email: string, password: string) => {
-        await api.get('http://localhost:8000/sanctum/csrf-cookie', {
-            withCredentials: true,
-        });
+        await api.get('/sanctum/csrf-cookie');
 
-        await api.post('http://localhost:8000/login', { email, password }, {
-            withCredentials: true,
-        });
+        await api.post('/login', { email, password });
 
         await fetchUser();
     };
 
     const logout = async () => {
-        await api.post('http://localhost:8000/logout', {}, {
-            withCredentials: true,
-        });
+        await api.post('/logout', {});
         setUser(null);
     };
 

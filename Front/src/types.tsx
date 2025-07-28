@@ -74,6 +74,7 @@ export interface Tag {
   id: number;
   content: string;
   color: string;
+  employee_id: number;
 }
 
 export interface Salary {

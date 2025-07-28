@@ -64,14 +64,10 @@ const DepartmentsDetails: React.FC = () => {
                 <h3>Funcionários do {department.department}</h3>
                 {
                     employee.map((emp) => {
-                        if (employee) {
-                            if (emp.position) {
-                                if (emp.position.department?.id == department.id) {
-                                    return (
-                                        <p>{emp.first_name} {emp.last_name}</p>
-                                    )
-                                }
-                            }
+                        if (emp.position?.department?.id == department.id) {
+                            return (
+                                <p>{emp.first_name} {emp.last_name}</p>
+                            )
                         }
                     })
                 }

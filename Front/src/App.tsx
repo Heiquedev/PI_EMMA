@@ -34,7 +34,6 @@ const App: React.FC = () => {
           <Route path="/employees/:id" element={<EmployeeDetails />} />
           <Route path="/departamentos" element={<Departments onAdd={() => setShowModal(true)} />} />
           <Route path="/departments/:id" element={<DepartmentDetails/>}/>
-          <Route path="/cargos" element={<DepartmentTable/>}/>
           {/* Coloque mais rotas aqui conforme criar outras seções */}
         </Routes>
       </main>

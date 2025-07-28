@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../services/api';
 import { useParams } from 'react-router-dom';
 import styles from './EmployeeDetails.module.css';
 import type { Document, Employee } from '../types';
@@ -13,7 +13,7 @@ const EmployeeDetails: React.FC = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
-        axios.get(`http://localhost:8000/api/employees/${id}`)
+        api.get(`http://localhost:8000/api/employees/${id}`)
             .then(res => {
                 setEmployee(res.data.data);
                 setDocuments(res.data.data.documents || []);
@@ -22,7 +22,7 @@ const EmployeeDetails: React.FC = () => {
     }, [id]);
     
     const deleteTag = (tagId:number) => {
-        axios.delete(`http://localhost:8000/api/tags/${tagId}/`)
+        api.delete(`http://localhost:8000/api/tags/${tagId}/`)
             .then(() => window.location.reload())
             .catch(err => console.error("Erro ao deletar tag:", err));
     }
@@ -50,7 +50,7 @@ const EmployeeDetails: React.FC = () => {
     
         setUploading(true);
     
-        axios.post(`http://localhost:8000/api/employees/${id}/documents`, formData, {
+        api.post(`http://localhost:8000/api/employees/${id}/documents`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
@@ -68,7 +68,7 @@ const EmployeeDetails: React.FC = () => {
       };
 
     useEffect(() => {
-        axios.get(`http://localhost:8000/api/employees/${id}`)
+        api.get(`http://localhost:8000/api/employees/${id}`)
             .then(res => {
                 const employee = res.data.data;
                 setEmployee(employee);
@@ -83,7 +83,7 @@ const EmployeeDetails: React.FC = () => {
     };
 
     const handleSave = () => {
-        axios.put(`http://localhost:8000/api/employees/${id}`, employee)
+        api.put(`http://localhost:8000/api/employees/${id}`, employee)
             .then(() => setIsModalOpen(false))
             .catch(err => console.error("Erro ao salvar funcionário:", err));
     };

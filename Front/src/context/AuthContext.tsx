@@ -22,35 +22,58 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [loading, setLoading] = useState(true);
 
     const fetchUser = async () => {
+        setLoading(true);
         try {
-            const res = await api.get('http://localhost:8000/api/user', {
+            const res = await api.get('/api/user', {
                 withCredentials: true,
             });
             setUser(res.data);
-        } catch {
+        } catch (err: any) {
             setUser(null);
+            // Se o erro for de autenticação, limpe o usuário
+            if (err?.response?.status === 401 || err?.response?.status === 419) {
+                setUser(null);
+            }
         } finally {
             setLoading(false);
         }
     };
 
     const login = async (email: string, password: string) => {
-        await api.get('http://localhost:8000/sanctum/csrf-cookie', {
-            withCredentials: true,
-        });
+        setLoading(true);
+        try {
+            // Sempre obtenha um novo CSRF cookie antes de cada tentativa
+            await api.get('/sanctum/csrf-cookie', {
+                withCredentials: true,
+            });
 
-        await api.post('http://localhost:8000/login', { email, password }, {
-            withCredentials: true,
-        });
+            // Aguarde a resposta do login antes de buscar o usuário
+            await api.post('/login', { email, password }, {
+                withCredentials: true,
+            });
 
-        await fetchUser();
+            // Só depois de login bem-sucedido, busque o usuário
+            await fetchUser();
+        } catch (err) {
+            setUser(null);
+            throw err; // Propague o erro para o componente de login
+        } finally {
+            setLoading(false);
+        }
     };
 
     const logout = async () => {
-        await api.post('http://localhost:8000/logout', {}, {
-            withCredentials: true,
-        });
-        setUser(null);
+        setLoading(true);
+        try {
+            await api.post('/logout', {}, {
+                withCredentials: true,
+            });
+        } catch {
+            // Ignorar erros de logout
+        } finally {
+            setUser(null);
+            setLoading(false);
+        }
     };
 
     useEffect(() => {

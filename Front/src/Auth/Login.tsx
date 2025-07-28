@@ -32,6 +32,9 @@ const Login: React.FC = () => {
                     case 401:
                         setErrorMsg('E-mail ou senha inválidos.');
                         break;
+                    case 419:
+                        setErrorMsg('Sessão expirada. Tente novamente.');
+                        break;
                     default:
                         setErrorMsg('Erro inesperado no servidor.');
                 }

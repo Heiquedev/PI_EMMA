@@ -46,7 +46,7 @@ ul {
   padding-left: 1.25rem;
 }
 
-ul li {
+ul li, button {
   margin-bottom: 0.5rem;
   word-wrap: break-word;
 }
@@ -58,6 +58,7 @@ ul li {
   margin-top: 0.5rem;
 }
 
+
 .tagsList li {
   padding: 0.4rem 0.8rem;
   border-radius: 9999px;
@@ -67,21 +68,18 @@ ul li {
   list-style: none;
 }
 
-.editButton {
+.modalsButton {
   margin-top: 2rem;
   padding: 0.8rem 1.5rem;
-  background-color: #0061f2;
+  background-color: #42474e;
   color: white;
   border: none;
-  border-radius: 0.6rem;
+  border-radius: 20px;
+
   cursor: pointer;
   transition: background 0.3s ease;
   width: fit-content;
   align-self: flex-start;
-}
-
-.editButton:hover {
-  background-color: #004bb5;
 }
 
 .modalOverlay {
@@ -163,7 +161,7 @@ ul li {
     padding: 1rem;
   }
 
-  .editButton {
+  .modalsButtons {
     width: 100%;
     text-align: center;
   }

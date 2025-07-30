@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import styles from './DepartmentsTable.module.css'
 import type { Department } from '../types';
 import { Link } from 'react-router';
+import api from '../services/api';
 
 const DepartmentTable: React.FC = () => {
   const [departments, setDepartments] = useState<Department[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get('http://localhost:8000/api/departments')
+    api.get('http://localhost:8000/api/departments')
       .then(response => {
         setDepartments(response.data.data); // Pegando o array dentro de data
       })
@@ -46,7 +46,7 @@ const DepartmentTable: React.FC = () => {
                 <td>{departmentId}</td>
                 <td>{departmentName}</td>
                 <td>{departmentDesc}</td>
-                <Link to={`/departments/${dep.description}`} className={styles.buttonTable}>Ver</Link>
+                <Link to={`/departments/${dep.department}`} className={styles.buttonTable}>Ver</Link>
               </tr>
             );
           })}

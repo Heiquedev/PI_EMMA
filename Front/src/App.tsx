@@ -9,6 +9,8 @@ import { useState } from 'react';
 import EmployeeModal from './components/EmployeeModal';
 import GoogleCallback from './layout/GoogleCallback'; // <-- Adicione essa página
 import Register from './Auth/Register';
+import DepartmentDetails from './components/DepartmentDetails';
+import Departments from './components/Department';
 
 const App = () => {
   const { isAuthenticated, loading } = useAuth();
@@ -65,7 +67,30 @@ const App = () => {
             )
           }
         />
-
+        <Route
+          path="/departments"
+          element={
+            isAuthenticated ? (
+              <MainLayout>
+                <Departments onAdd={() => setShowModal(true)} />
+              </MainLayout>
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
+        <Route
+          path="/departments/:id"
+          element={
+            isAuthenticated ? (
+              <MainLayout>
+                <DepartmentDetails />
+              </MainLayout>
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
       </Routes>
 
       <EmployeeModal visible={showModal} onClose={() => setShowModal(false)} />

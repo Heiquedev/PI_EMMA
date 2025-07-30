@@ -74,6 +74,7 @@ export interface Tag {
   id: number;
   content: string;
   color: string;
+  employee_id: number;
 }
 
 export interface Salary {
@@ -118,4 +119,15 @@ export interface Employee {
   leaves?: Leave[];
   reports?: Report[];
   incidents?: Incident[];
+}
+
+export interface PayRoll {
+  employee_id: number;
+  employee_name: string;
+  position: string;
+  days: number;
+  hours: number;
+  desconts: number;
+  salary: number;
+  fouls: Leave[];
 }

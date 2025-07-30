@@ -1,5 +1,8 @@
 import React from 'react';
 import styles from './Auth.module.css';
+import { Route } from 'react-router';
+import Register from './Register';
+import { NavLink } from 'react-router-dom';
 
 const Login: React.FC = () => {
     const handleGoogleLogin = () => {
@@ -17,7 +20,7 @@ const Login: React.FC = () => {
                 </button>
 
                 <div className={styles.switchLink}>
-                    Ainda não tem conta? Registre-se com Google.
+                    Ainda não tem conta? <NavLink to={'/register'}> Registre-se </NavLink> com Google.
                 </div>
             </div>
         </div>

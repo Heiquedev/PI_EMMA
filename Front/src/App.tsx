@@ -66,6 +66,8 @@ const App = () => {
           }
         />
 
+        {/* Redirecionamento padrão */}
+        <Route path="*" element={<Navigate to="/dashboard" />} />
       </Routes>
 
       <EmployeeModal visible={showModal} onClose={() => setShowModal(false)} />

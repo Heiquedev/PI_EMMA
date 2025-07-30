@@ -1,6 +1,5 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Login from './Auth/Login';
-import Register from './Auth/Register';
 import MainLayout from './layout/MainLayout';
 import Dashboard from './components/Dashboard';
 import Employees from './components/Employees';
@@ -8,6 +7,8 @@ import { useAuth } from './context/AuthContext';
 import EmployeeDetails from './components/EmployeeDetails';
 import { useState } from 'react';
 import EmployeeModal from './components/EmployeeModal';
+import GoogleCallback from './layout/GoogleCallback'; // <-- Adicione essa página
+import Register from './Auth/Register';
 
 const App = () => {
   const { isAuthenticated, loading } = useAuth();
@@ -23,6 +24,7 @@ const App = () => {
         {/* Autenticação (sem layout) */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/google/callback" element={<GoogleCallback />} /> {/* NOVO */}
 
         {/* Protegido (com layout) */}
         <Route
@@ -37,12 +39,13 @@ const App = () => {
             )
           }
         />
+
         <Route
           path="/employees"
           element={
             isAuthenticated ? (
               <MainLayout>
-                <Employees onAdd={() => { setShowModal(true) }} />
+                <Employees onAdd={() => setShowModal(true)} />
               </MainLayout>
             ) : (
               <Navigate to="/login" replace />
@@ -63,9 +66,8 @@ const App = () => {
           }
         />
 
-        {/* Redirecionamento padrão */}
-        <Route path="*" element={<Navigate to="/dashboard" />} />
       </Routes>
+
       <EmployeeModal visible={showModal} onClose={() => setShowModal(false)} />
     </div>
   );

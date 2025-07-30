@@ -11,8 +11,10 @@ interface AuthContextType {
     user: User | null;
     isAuthenticated: boolean;
     loading: boolean;
-    login: (email: string, password: string) => Promise<void>;
+    // login não faz sentido local, mas deixei opcional
+    login?: () => Promise<void>;
     logout: () => Promise<void>;
+    setUser: React.Dispatch<React.SetStateAction<User | null>>;
 }
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
@@ -22,69 +24,43 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [loading, setLoading] = useState(true);
 
     const fetchUser = async () => {
-        setLoading(true);
         try {
-            const res = await api.get('/api/user', {
-                withCredentials: true,
-            });
-            setUser(res.data);
-        } catch (err: any) {
-            setUser(null);
-            // Se o erro for de autenticação, limpe o usuário
-            if (err?.response?.status === 401 || err?.response?.status === 419) {
-                setUser(null);
-            }
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const login = async (email: string, password: string) => {
-        setLoading(true);
-        try {
-            // Sempre obtenha um novo CSRF cookie antes de cada tentativa
-            await api.get('/sanctum/csrf-cookie', {
-                withCredentials: true,
-            });
-
-            // Aguarde a resposta do login antes de buscar o usuário
-            await api.post('/login', { email, password }, {
-                withCredentials: true,
-            });
-
-            // Só depois de login bem-sucedido, busque o usuário
-            await fetchUser();
-        } catch (err) {
-            setUser(null);
-            throw err; // Propague o erro para o componente de login
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const logout = async () => {
-        setLoading(true);
-        try {
-            await api.post('/logout', {}, {
-                withCredentials: true,
-            });
+            const response = await api.get('/api/user'); // rota protegida que retorna dados do usuário logado via sessão
+            setUser(response.data);
         } catch {
-            // Ignorar erros de logout
-        } finally {
             setUser(null);
+        } finally {
             setLoading(false);
         }
     };
 
     useEffect(() => {
-        fetchUser();
+        fetchUser(); // SEM token, só tenta buscar usuário da sessão
     }, []);
 
+    // Login via Google será feito via redirecionamento, então não precisa de função local
+    // Poderia deixar algo para iniciar o login, ex:
+    /*
+    const login = async () => {
+      window.location.href = 'http://localhost:8000/auth/google/redirect';
+    };
+    */
+
+    const logout = async () => {
+        try {
+            await api.post('/logout');
+        } catch {
+            // opcional: tratar erro
+        }
+        setUser(null);
+    };
+
     return (
-        <AuthContext.Provider value={{ user, isAuthenticated: !!user, loading, login, logout }}>
+        <AuthContext.Provider value={{ user, isAuthenticated: !!user, loading, logout, setUser }}>
             {children}
         </AuthContext.Provider>
     );
 };
 
 export const useAuth = () => useContext(AuthContext);
+export default AuthContext;

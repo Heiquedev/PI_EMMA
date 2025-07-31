@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../services/api';
 import styles from './EmployeeModal.module.css';
 import type { Position, Employee } from '../types';
 import { toast, ToastContainer } from 'react-toastify';
@@ -37,7 +37,7 @@ const EmployeeModal: React.FC<EmployeeModalProps> = ({ visible, onClose }) => {
   }, [visible]);
 
   useEffect(() => {
-    axios.get('http://localhost:8000/api/positions')
+    api.get('http://localhost:8000/api/positions')
       .then(response => setPositions(response.data.data))
       .catch(() => toast.error('Erro ao carregar cargos'));
   }, []);
@@ -54,7 +54,7 @@ const EmployeeModal: React.FC<EmployeeModalProps> = ({ visible, onClose }) => {
     setIsSubmitting(true);
 
     try {
-      await axios.post('http://localhost:8000/api/employees', employee);
+      await api.post('http://localhost:8000/api/employees', employee);
       toast.success('Funcionário cadastrado com sucesso!');
       onClose();
     } catch (error: any) {

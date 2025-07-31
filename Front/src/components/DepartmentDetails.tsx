@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import styles from './DepartmentDetails.module.css';
 import type { Department, Employee, Position } from '../types';
@@ -8,10 +7,13 @@ import api from '../services/api';
 const DepartmentDetails: React.FC = () => {
     const { id } = useParams();
     const [department, setDepartment] = useState<Department | null>(null);
+    const [position, setPosition] = useState<Position | null>(null);
     const [employee, setEmployee] = useState<Employee[]>([]);
     const [positions, setPositions] = useState<Position[]>([]);
     const [uploading, setUploading] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isPositionsModalOpen, setIsPositionsModalOpen] = useState(false);
+    const [isPositionModalOpen, setIsUpdPositionModalOpen] = useState(false);
 
     useEffect(() => {
         api.get(`http://localhost:8000/api/departments/${id}`)
@@ -23,21 +25,59 @@ const DepartmentDetails: React.FC = () => {
     useEffect(() => {
         api.get(`http://localhost:8000/api/employees`)
             .then(res => {
-                setEmployee(res.data.data);
+                if (employee) {
+                    setEmployee(res.data.data);
+                }
             })
-            .catch(err => console.error("Erro ao buscar departamento:", err));
+            .catch(err => console.error("Erro ao buscar funcionários:", err));
     }, [id]);
     useEffect(() => {
         api.get(`http://localhost:8000/api/positions`)
             .then(res => {
-                setPositions(res.data.data);
+                if (positions) {
+                    setPositions(res.data.data);
+
+                }
             })
-            .catch(err => console.error("Erro ao buscar departamento:", err));
+            .catch(err => console.error("Erro ao buscar cargos:", err));
     }, [id]);
 
 
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+        if (department && position) {
+            setDepartment({ ...department, [e.target.name]: e.target.value })
+            setPosition({ ...position, [e.target.name]: e.target.value })
+        }
+    }
 
-    if (!department) return <p>Carregando dados do departamento...</p>;
+    const handleSaveDepartment = () => {
+        setUploading(true);
+        api.put(`http://localhost:8000/api/departments/${department?.id}`, department)
+            .then(res => {
+                console.log("Departamento atualizado com sucesso:", res.data);
+                setIsModalOpen(false);
+            })
+            .catch(err => console.error("Erro ao atualizar departamento:", err))
+            .finally(() => setUploading(false));
+    }
+
+    const handleSavePosition = () => {
+        setUploading(true);
+        api.post(`http://localhost:8000/api/positions/${department?.id}`, position)
+            .then(res => {
+                console.log("Departamento atualizado com sucesso:", res.data);
+                setIsModalOpen(false);
+            })
+            .catch(err => console.error("Erro ao atualizar departamento:", err))
+            .finally(() => setUploading(false));
+    }
+
+    function createModal() {
+        setIsPositionsModalOpen(true);
+        setIsModalOpen(false);
+    }
+
+    if (!department || !employee || !positions) return <p>Carregando dados do departamento...</p>;
 
     return (
         <div className={styles.detailsContainer}>
@@ -54,7 +94,7 @@ const DepartmentDetails: React.FC = () => {
                         if (pos.department) {
                             if (pos.department.id == department.id) {
                                 return (
-                                    <p>{pos.title}</p>
+                                    <p onClick={() => setIsUpdPositionModalOpen(true)}>{pos.title}</p>
                                 )
                             }
                         }
@@ -67,12 +107,66 @@ const DepartmentDetails: React.FC = () => {
                     employee.map((emp) => {
                         if (emp.position?.department?.id == department.id) {
                             return (
-                                <p>{emp.first_name} {emp.last_name}</p>
+                                <div>
+                                    <p>{emp.first_name} {emp.last_name} {emp.position.title}</p>
+                                </div>
+
                             )
                         }
                     })
                 }
             </div>
+            <div className={styles.btnArea}>
+                <button className={styles.btnUpdate} onClick={() => setIsModalOpen(true)}>
+                    Editar Departamento
+                </button>
+            </div>
+
+            {isModalOpen && (
+                <div className={styles.modalOverlay}>
+                    <div className={styles.modalContent}>
+                        <div className={styles.modalActions}>
+                            <input name="id" value={department.id} type='hidden' />
+                            <input name="department" value={department.department} onChange={handleChange} />
+                            <textarea name="description" value={department.description || ''} onChange={handleChange} />
+                            <button onClick={() => createModal()}>Criar novo cargo</button>
+                            <button onClick={handleSaveDepartment}>Salvar</button>
+                            <button onClick={() => setIsModalOpen(false)}>Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {isPositionsModalOpen && (
+                <div className={styles.modalOverlay}>
+                    <div className={styles.modalContent}>
+                        <h2>Criar novo cargo</h2>
+                        <div className={styles.modalActions}>
+                            <label>Nome</label>
+                            <input name="title" value={position?.title} onChange={handleChange} />
+                            <label>Descrição</label>
+                            <textarea name="description" value={department.description || ''} onChange={handleChange} />
+                            <button onClick={handleSavePosition}>Salvar</button>
+                            <button onClick={() => setIsModalOpen(false)}>Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {isPositionModalOpen && (
+                <div className={styles.modalOverlay}>
+                    <div className={styles.modalContent}>
+                        <h2>Criar novo cargo</h2>
+                        <div className={styles.modalActions}>
+                            <label>Nome</label>
+                            {/* <input name="title" value={position.title} onChange={handleChange} /> */}
+                            <label>Descrição</label>
+                            <textarea name="description" value={department.description || ''} onChange={handleChange} />
+                            <button onClick={handleSavePosition}>Salvar</button>
+                            <button onClick={() => setIsModalOpen(false)}>Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
         </div>
     )

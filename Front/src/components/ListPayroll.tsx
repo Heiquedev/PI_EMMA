@@ -5,7 +5,6 @@
 // import { Link } from "react-router-dom"
 // import type { Employee, PayRoll } from "../types";
 
-
 // const ListPayroll: React.FC<{ payrolls: PayRoll[] }> = ({ payrolls }) => {
 //   const [employees, setEmployees] = useState<Employee[]>([]);
 //   const [loading, setLoading] = useState(true);
@@ -43,7 +42,6 @@
 //         const employeePosition = emp.position?.title || '—';
 //         const employeeLeaves = parseInt(emp.leaves[]);
 //         const employeeDays = `${(30 - employeeLeaves) - 4 * 2}`
-
 
 //         return (
 //           <tr key={emp.id}>

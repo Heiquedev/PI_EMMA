@@ -7,13 +7,15 @@ import { useAuth } from './context/AuthContext';
 import EmployeeDetails from './components/EmployeeDetails';
 import { useState } from 'react';
 import EmployeeModal from './components/EmployeeModal';
-import GoogleCallback from './layout/GoogleCallback'; // <-- Adicione essa página
+import GoogleCallback from './layout/GoogleCallback';
 import Register from './Auth/Register';
 import DepartmentDetails from './components/DepartmentDetails';
 import Departments from './components/Department';
+import AuthorizedEmails from './components/AuthorizedEmails';
+import Unauthorized from './components/Unauthorized';
 
 const App = () => {
-  const { isAuthenticated, loading } = useAuth();
+  const { isAuthenticated, loading, user } = useAuth();
   const [showModal, setShowModal] = useState(false);
 
   if (loading) {
@@ -23,25 +25,13 @@ const App = () => {
   return (
     <div className="App">
       <Routes>
-        {/* Autenticação (sem layout) */}
+        {/* Rotas públicas */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/google/callback" element={<GoogleCallback />} /> {/* NOVO */}
+        <Route path="/google/callback" element={<GoogleCallback />} />
+        <Route path="/unauthorized" element={<Unauthorized />} />
 
-        {/* Protegido (com layout) */}
-        <Route
-          path="/dashboard"
-          element={
-            isAuthenticated ? (
-              <MainLayout>
-                <Dashboard />
-              </MainLayout>
-            ) : (
-              <Navigate to="/login" replace />
-            )
-          }
-        />
-
+        {/* Rotas protegidas */}
         <Route
           path="/employees"
           element={
@@ -54,7 +44,6 @@ const App = () => {
             )
           }
         />
-
         <Route
           path="/employees/:id"
           element={
@@ -91,8 +80,35 @@ const App = () => {
             )
           }
         />
+        <Route
+          path="/admin/emails"
+          element={
+            isAuthenticated && user?.role === 'admin' ? (
+              <MainLayout>
+                <AuthorizedEmails />
+              </MainLayout>
+            ) : (
+              <Navigate to="/unauthorized" replace />
+            )
+          }
+        />
+
+        {/* Dashboard como rota padrão */}
+        <Route
+          path="/*"
+          element={
+            isAuthenticated ? (
+              <MainLayout>
+                <Dashboard />
+              </MainLayout>
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
       </Routes>
 
+      {/* Modal deve estar fora das rotas, mas ainda dentro do componente */}
       <EmployeeModal visible={showModal} onClose={() => setShowModal(false)} />
     </div>
   );

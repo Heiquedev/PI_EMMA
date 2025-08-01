@@ -8,7 +8,7 @@ const Register: React.FC = () => {
     const handleGoogleLogin = () => {
         // Armazena a role temporariamente
         localStorage.setItem('google_registration_role', role);
-        window.location.href = `http://localhost:8000/api/auth/google/redirect?role=${role}`;
+        window.location.href = `http://localhost:8000/auth/google/redirect?role=${role}`;
     };
 
     return (

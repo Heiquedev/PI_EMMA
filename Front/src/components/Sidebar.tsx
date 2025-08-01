@@ -1,40 +1,83 @@
 import React from 'react';
 import styles from './Sidebar.module.css';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import clsx from 'clsx';
+import { LogOut } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+import { logoutUser } from '../services/api';
 
 interface SidebarProps {
   open: boolean;
   onClose: () => void;
+  isMobile: boolean;
+  isAdmin?: boolean;
 }
 
-const links = [
-  { to: '/dashboard', icon: 'fas fa-tachometer-alt', label: 'Dashboard' },
-  { to: '/employees', icon: 'fas fa-user-alt', label: 'Funcionários' },
-  { to: '/departments', icon: 'fas fa-building', label: 'Departamentos' },
-  { to: '/payroll', icon: 'fas fa-invoice-dollar', label: 'Folha de Pagamento' },
-];
+const Sidebar: React.FC<SidebarProps> = ({ open, onClose, isMobile, isAdmin }) => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
-const Sidebar: React.FC<SidebarProps> = ({ open, onClose }) => {
   const handleLinkClick = () => onClose();
+  const handleLogout = async () => {
+    try {
+      await logoutUser();
+      navigate('/login');
+    } catch (error) {
+      console.error('Erro ao fazer logout', error);
+    }
+  };
+
+  const links = [
+    { to: '/dashboard', label: 'Dashboard' },
+    { to: '/employees', label: 'Funcionários' },
+    { to: '/departments', label: 'Departamentos' },
+    { to: '/documents', label: 'Documentos' },
+    { to: '/tags', label: 'Tags' },
+    { to: '/labor-rights', label: 'Direitos Trabalhistas' },
+  ];
+
+  if (isAdmin) {
+    links.push({ to: '/admin/emails', label: 'Acessos' });
+  }
 
   return (
-    <nav className={`${styles.sidebar} ${open ? styles.open : ''}`}>
-      <ul>
-        {links.map(({ to, icon, label }) => (
-          <li key={to} className={styles.linkWrapper}>
+    <>
+      {/* Backdrop para mobile */}
+      {isMobile && open && (
+        <div className={styles.backdrop} onClick={onClose} />
+      )}
+
+      <aside
+        className={clsx(styles.sidebar, {
+          [styles.open]: open,
+          [styles.mobile]: isMobile,
+        })}
+      >
+        <div className={styles.logo}>EMMA</div>
+
+        <nav className={styles.nav}>
+          {links.map((link) => (
             <NavLink
-              to={to}
-              onClick={handleLinkClick}
+              key={link.to}
+              to={link.to}
               className={({ isActive }) =>
-                isActive ? `${styles.link} ${styles.active}` : styles.link
+                clsx(styles.link, isActive && styles.active)
               }
+              onClick={isMobile ? onClose : undefined}
             >
-              <i className={icon}></i> {label}
+              {link.label}
             </NavLink>
-          </li>
-        ))}
-      </ul>
-    </nav>
+          ))}
+        </nav>
+
+        <div className={styles.footer}>
+          <button className={styles.logoutBtn} onClick={handleLogout}>
+            <LogOut size={16} />
+            Sair
+          </button>
+        </div>
+      </aside>
+    </>
   );
 };
 

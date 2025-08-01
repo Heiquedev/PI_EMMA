@@ -1,32 +1,28 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
+import { setAuthToken } from '../services/api';
 
 const GoogleCallback: React.FC = () => {
     const navigate = useNavigate();
     const { setUser } = useAuth();
 
     useEffect(() => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const token = urlParams.get('token');
+        const params = new URLSearchParams(window.location.search);
+        const token = params.get('token');
+        const userData = params.get('user');
+        console.log('Token:', token);
+        console.log('UserData:', userData);
+        
+        if (token && userData) {
+            const user = JSON.parse(decodeURIComponent(userData));
 
-        if (token) {
             localStorage.setItem('token', token);
-            api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
-            api.get('/api/user')
-                .then((response) => {
-                    setUser(response.data);
-                    navigate('/dashboard');
-                })
-                .catch(() => {
-                    navigate('/login');
-                });
-        } else {
-            navigate('/login');
+            setAuthToken(token);
+            setUser(user); // Agora setamos todos os campos: id, name, email, role
+            navigate('/dashboard');
         }
-    }, [navigate, setUser]);
+    }, []);
 
     return <div>Autenticando com Google...</div>;
 };

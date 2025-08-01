@@ -1,12 +1,10 @@
 import React from 'react';
 import styles from './Auth.module.css';
-import { Route } from 'react-router';
-import Register from './Register';
 import { NavLink } from 'react-router-dom';
 
 const Login: React.FC = () => {
     const handleGoogleLogin = () => {
-        window.location.href = 'http://localhost:8000/api/auth/google/redirect';
+        window.location.href = 'http://localhost:8000/auth/google';
     };
 
     return (

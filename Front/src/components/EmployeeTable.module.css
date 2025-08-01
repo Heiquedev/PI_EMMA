@@ -149,3 +149,66 @@
     padding: 8px;
   }
 }
+
+:root {
+  --purple: #7834fc;
+  --bg-light: #ffffff;
+  --bg-dark: #1e1e1e;
+  --text-light: #1c1c1c;
+  --text-dark: #f1f1f1;
+}
+
+body.dark {
+  --bg-light: #2a2a2a;
+  --text-light: #f1f1f1;
+}
+
+/* Filtros aprimorados */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: var(--bg-light);
+  border-radius: 12px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.filters input,
+.filters select {
+  flex: 1;
+  min-width: 180px;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 0.9rem;
+  background: white;
+  transition: border 0.2s;
+}
+
+.filters input:focus-visible,
+.filters select:focus-visible {
+  border-color: var(--purple);
+  outline: none;
+}
+
+.container {
+  padding: 1rem 0;
+}
+
+.tableWrapper {
+  overflow-x: auto;
+}
+
+/* Dark mode support */
+body.dark .filters {
+  background: var(--bg-dark);
+}
+
+body.dark .filters input,
+body.dark .filters select {
+  background: #1f1f1f;
+  color: var(--text-dark);
+  border: 1px solid #444;
+}

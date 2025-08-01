@@ -1,21 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import api from '../services/api';
-
-interface User {
-    id: number;
-    name: string;
-    email: string;
-}
-
-interface AuthContextType {
-    user: User | null;
-    isAuthenticated: boolean;
-    loading: boolean;
-    // login não faz sentido local, mas deixei opcional
-    login?: () => Promise<void>;
-    logout: () => Promise<void>;
-    setUser: React.Dispatch<React.SetStateAction<User | null>>;
-}
+import api, { setAuthToken } from '../services/api';
+import type { User } from '../types';
+import type { AuthContextType } from '../types';
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
@@ -24,10 +10,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [loading, setLoading] = useState(true);
 
     const fetchUser = async () => {
+        const token = localStorage.getItem('token');
+
+        if (!token) {
+            setLoading(false);
+            return;
+        }
+
+        setAuthToken(token); // seta header Authorization
         try {
-            const response = await api.get('/api/user'); // rota protegida que retorna dados do usuário logado via sessão
+            const response = await api.get('/api/user'); // agora exige token Bearer
             setUser(response.data);
-        } catch {
+        } catch (error) {
+            console.error('Erro ao buscar usuário com token:', error);
+            localStorage.removeItem('token');
+            setAuthToken(null);
             setUser(null);
         } finally {
             setLoading(false);
@@ -35,23 +32,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     useEffect(() => {
-        fetchUser(); // SEM token, só tenta buscar usuário da sessão
+        fetchUser();
     }, []);
-
-    // Login via Google será feito via redirecionamento, então não precisa de função local
-    // Poderia deixar algo para iniciar o login, ex:
-    /*
-    const login = async () => {
-      window.location.href = 'http://localhost:8000/auth/google/redirect';
-    };
-    */
 
     const logout = async () => {
         try {
-            await api.post('/logout');
-        } catch {
-            // opcional: tratar erro
-        }
+            await api.post('/api/logout'); // opcional, pode ser removido
+        } catch { }
+        localStorage.removeItem('token');
+        setAuthToken(null);
         setUser(null);
     };
 

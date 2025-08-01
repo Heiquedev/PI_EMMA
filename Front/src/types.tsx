@@ -78,12 +78,14 @@ export interface Tag {
 }
 
 export interface Salary {
+  id: number;
   amount: string;
   start_date: string;
   end_date: string | null;
 }
 
 export interface Leave {
+  id: number;
   type: string;
   reason: string;
   start_date: string;
@@ -92,8 +94,10 @@ export interface Leave {
 }
 
 export interface Report {
+  id: number;
   title: string;
   content: string;
+  created_at: string;
 }
 
 export interface Employee {
@@ -103,7 +107,7 @@ export interface Employee {
   email: string;
   date_of_birth: string;
   hire_date: string;
-  absence: number;
+  absences: Absence[];
   cpf: string;
   rg?: string;
   phone?: string;
@@ -119,6 +123,7 @@ export interface Employee {
   leaves?: Leave[];
   reports?: Report[];
   incidents?: Incident[];
+  attendances: Attendance[];
 }
 
 export interface PayRoll {
@@ -130,4 +135,31 @@ export interface PayRoll {
   desconts: number;
   salary: number;
   fouls: Leave[];
+}
+
+export interface User {
+    id: number;
+    name: string;
+    email: string;
+    role: string;
+}
+
+export interface AuthContextType {
+    user: User | null;
+    isAuthenticated: boolean;
+    loading: boolean;
+    logout: () => Promise<void>;
+    setUser: React.Dispatch<React.SetStateAction<User | null>>;
+}
+
+export interface Attendance {
+  id: number;
+  date: string;
+  status: string;
+}
+
+export interface Absence {
+  id: number;
+  date: string;
+  reason: string;
 }

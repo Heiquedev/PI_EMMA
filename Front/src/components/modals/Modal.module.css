@@ -1,0 +1,178 @@
+/* Modal.module.css */
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(3px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    animation: fadeIn 0.25s ease-in-out;
+}
+
+.modalContent {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    max-width: 600px;
+    width: 100%;
+    padding: 2rem;
+    position: relative;
+    z-index: 1001;
+    animation: slideIn 0.25s ease-in-out;
+    transition: all 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+}
+
+.dark .modalContent {
+    background-color: #1e1e1e;
+    color: #f1f1f1;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.title {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.closeButton {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #555;
+    transition: color 0.2s ease-in-out;
+}
+
+.closeButton:hover {
+    color: #000;
+}
+
+.dark .closeButton {
+    color: #aaa;
+}
+
+.dark .closeButton:hover {
+    color: #fff;
+}
+
+.content {
+    max-height: 70vh;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+/* Scroll customizado */
+.content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.content::-webkit-scrollbar-thumb {
+    background-color: rgba(100, 100, 100, 0.4);
+    border-radius: 4px;
+}
+
+.dark .content::-webkit-scrollbar-thumb {
+    background-color: rgba(200, 200, 200, 0.3);
+}
+
+.footer {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.button {
+    padding: 0.6rem 1.2rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.buttonPrimary {
+    background-color: #4a90e2;
+    color: white;
+}
+
+.buttonPrimary:hover {
+    background-color: #3a7cd6;
+}
+
+.buttonSecondary {
+    background-color: #ddd;
+    color: #333;
+}
+
+.buttonSecondary:hover {
+    background-color: #ccc;
+}
+
+.dark .buttonSecondary {
+    background-color: #444;
+    color: #eee;
+}
+
+.dark .buttonSecondary:hover {
+    background-color: #555;
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+    .modalContent {
+        padding: 1.5rem;
+        max-height: 90vh;
+    }
+
+    .title {
+        font-size: 1.3rem;
+    }
+
+    .footer {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .button {
+        width: 100%;
+    }
+}
+
+/* Animações */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}

@@ -1,7 +1,7 @@
-import React from 'react';
-import SearchBar from './SearchBar';
-import DepartmentTable from './DepartmentTable';
-import styles from './Department.module.css';
+import React from "react";
+import SearchBar from "./SearchBar";
+import DepartmentTable from "./DepartmentTable";
+import styles from "./Department.module.css";
 
 interface DepartmentsProps {
   onAdd: () => void;

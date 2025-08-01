@@ -30,7 +30,7 @@ const App = () => {
 
         {/* Protegido (com layout) */}
         <Route
-          path="/dashboard"
+          path="/*"
           element={
             isAuthenticated ? (
               <MainLayout>

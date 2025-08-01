@@ -115,6 +115,20 @@ ul li {
   text-align: center;
 }
 
+.modalsButton {
+  margin-top: 2rem;
+  padding: 0.8rem 1.5rem;
+  background-color: #42474e;
+  color: white;
+  border: none;
+  border-radius: 20px;
+
+  cursor: pointer;
+  transition: background 0.3s ease;
+  width: fit-content;
+  align-self: flex-start;
+}
+
 .modalContent input,
 .modalContent textarea,
 .modalContent select {

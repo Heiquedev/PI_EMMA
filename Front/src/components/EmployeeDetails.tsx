@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import styles from './EmployeeDetails.module.css';
 import type { Document, Employee, Tag } from '../types';
 import api from '../services/api';
+import axios from 'axios';
 
 const EmployeeDetails: React.FC = () => {
     const { id } = useParams();
@@ -82,14 +83,14 @@ const EmployeeDetails: React.FC = () => {
     };
 
     const handleSaveTag = () => {
-        api.post(`http://localhost:8000/api/employees/${id}/tags`, tagForm)
+        axios.post(`http://localhost:8000/api/employees/${id}/tags`, tagForm)
             .then(res => {
                 if (employee) {
                     const updatedTags = [...(employee.tags || []), res.data.data];
                     setEmployee({ ...employee, tags: updatedTags });
+                    setTagForm({ id: 0, content: '', color: '#000000', employee_id: 0 });
+                    setIsModalTagOpen(false);
                 }
-                setTagForm({ id: 0, content: '', color: '#000000', employee_id: 0 });
-                setIsModalTagOpen(false);
             })
             .catch(err => console.error("Erro ao adicionar tag:", err));
     };
@@ -99,7 +100,7 @@ const EmployeeDetails: React.FC = () => {
                 if (employee) {
                     const updatedTags = [...(employee.tags || []), res.data.data];
                     setEmployee({ ...employee, tags: updatedTags });
-                    setTagForm({ id: tagForm.id, content: '', color: '#000000', employee_id: employee.id });
+                    setTagForm({ id: tagForm.id, content: tagForm.content, color: tagForm.color, employee_id: employee.id });
                 }
 
                 setIsModalTagOpen(false);

@@ -142,9 +142,8 @@ const DepartmentDetails: React.FC = () => {
       </div>
       <div className={styles.modalsButton}>
         <button
-          className={styles.btnUpdate}
-          onClick={() => setIsModalOpen(true)}
-        >
+          className={styles.modalsButton}
+          onClick={() => setIsModalOpen(true)}>
           Editar Departamento
         </button>
       </div>
@@ -189,7 +188,7 @@ const DepartmentDetails: React.FC = () => {
                 onChange={handleChange}
               />
               <button onClick={handleSavePosition}>Salvar</button>
-              <button onClick={() => setIsModalOpen(false)}>Cancelar</button>
+              <button onClick={() => setIsPositionsModalOpen(false)}>Cancelar</button>
             </div>
           </div>
         </div>
@@ -204,7 +203,7 @@ const DepartmentDetails: React.FC = () => {
               <label>Descrição</label>
               <input name="description" value={position?.description} />
               <button onClick={handleUpdatePosition}>Atualizar</button>
-              <button onClick={() => setIsModalOpen(false)}>Cancelar</button>
+              <button onClick={() => setIsUpdPositionModalOpen(false)}>Cancelar</button>
             </div>
           </div>
         </div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import styles from './EmployeeDetails.module.css';
 import type { ChecklistItem, ChecklistTemplate, Document, Employee, EmployeeChecklist, Tag } from '../types';
 import AddAbsenceModal from './modals/AddAbsenceModal';
@@ -11,7 +11,6 @@ import api from '../services/api';
 import { FaCalendarAlt } from 'react-icons/fa';
 import ChecklistModal from './modals/ChecklistModal';
 import type { DetailedEmployeeChecklist } from '../types';
-
 const EmployeeDetails: React.FC = () => {
     const { id } = useParams();
     const [employee, setEmployee] = useState<Employee | null>(null);
@@ -31,6 +30,7 @@ const EmployeeDetails: React.FC = () => {
     const [detailedChecklist, setDetailedChecklist] = useState<DetailedEmployeeChecklist | null>(null);
     const [templates, setTemplates] = useState<ChecklistTemplate[]>([]);
     const [selectedTemplateId, setSelectedTemplateId] = useState('');
+    const navigate = useNavigate();
 
     useEffect(() => {
         api.get('/api/checklist-templates').then((res) => setTemplates(res.data));
@@ -51,6 +51,15 @@ const EmployeeDetails: React.FC = () => {
             });
     };
 
+    const deleteEmployee = () => {
+        if (window.confirm('Tem certeza que deseja deletar este funcionário?')) {
+            api.delete('http://localhost:8000/api/employees/' + id)
+                .then(() => {
+                    navigate('/employees'); // Redireciona automaticamente após apagar
+                })
+                .catch(err => console.error(id, "Erro ao deletar funcionário:", err));
+        }
+    };
 
 
     const openChecklistDetails = (checklistId: number) => {
@@ -599,6 +608,24 @@ const EmployeeDetails: React.FC = () => {
             <button onClick={() => setIsModalOpen(true)} className={styles.modalsButton} style={{ width: '100%', marginTop: 24, background: '#4a90e2', color: '#fff', border: 'none', borderRadius: 8, padding: '12px 0', fontWeight: 600, fontSize: 18 }}>
                 Editar Funcionário
             </button>
+            <div style={{ marginTop: 16 }}>
+                <button
+                    onClick={deleteEmployee}
+                    className={styles.deleteButton}
+                    style={{
+                        padding: '8px 20px',
+                        borderRadius: 6,
+                        background: '#e74c3c',
+                        color: '#fff',
+                        border: 'none',
+                        fontWeight: 500,
+                        cursor: 'pointer',
+                        width: '100%',
+                    }}
+                >
+                    Deletar Funcionário
+                </button>
+            </div>
 
             {isModalOpen && (
                 <div className={styles.modalOverlay}>

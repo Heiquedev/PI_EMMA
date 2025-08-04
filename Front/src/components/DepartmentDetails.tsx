@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styles from "./DepartmentDetails.module.css";
 import type { Department, Employee, Position } from "../types";
 import api from "../services/api";
@@ -14,6 +14,18 @@ const DepartmentDetails: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPositionsModalOpen, setIsPositionsModalOpen] = useState(false);
   const [isPositionModalOpen, setIsUpdPositionModalOpen] = useState(false);
+  const navigate = useNavigate();
+
+
+  const deleteDepartment = () => {
+    if (window.confirm('Tem certeza que deseja deletar este funcionário?')) {
+      api.delete('http://localhost:8000/api/departments/' + id)
+        .then(() => {
+          navigate('/departments'); // Redireciona automaticamente após apagar
+        })
+        .catch(err => console.error(id, "Erro ao deletar funcionário:", err));
+    }
+  };
 
   useEffect(() => {
     api
@@ -140,13 +152,40 @@ const DepartmentDetails: React.FC = () => {
           }
         })}
       </div>
-      <div className={styles.modalsButton}>
+      <div>
         <button
-          className={styles.modalsButton}
+          style={{
+            padding: '8px 20px',
+            borderRadius: 6,
+            background: '#42474e',
+            color: '#fff',
+            border: 'none',
+            fontWeight: 500,
+            cursor: 'pointer',
+            width: '100%',
+        }}
           onClick={() => setIsModalOpen(true)}>
           Editar Departamento
         </button>
       </div>
+      <div style={{ marginTop: 16 }}>
+                <button
+                    onClick={deleteDepartment}
+                    className={styles.deleteButton}
+                    style={{
+                        padding: '8px 20px',
+                        borderRadius: 6,
+                        background: '#e74c3c',
+                        color: '#fff',
+                        border: 'none',
+                        fontWeight: 500,
+                        cursor: 'pointer',
+                        width: '100%',
+                    }}
+                >
+                    Deletar Funcionário
+                </button>
+            </div>
 
       {isModalOpen && (
         <div className={styles.modalOverlay}>

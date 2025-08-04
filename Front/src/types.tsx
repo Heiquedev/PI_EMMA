@@ -163,3 +163,49 @@ export interface Absence {
   date: string;
   reason: string;
 }
+
+export interface ChecklistTask {
+  id: number;
+  checklist_template_id: number;
+  title: string;
+  is_required: boolean;
+}
+
+export interface ChecklistTemplate {
+  id: number;
+  name: string;
+  description: string;
+  tasks: ChecklistTask[];
+}
+
+export interface EmployeeChecklist {
+  id: number;
+  employee_id: number;
+  template_id: number;
+  status: 'in_progress' | 'completed' | 'not_started';
+  progress: number; // 0-100
+  template: {
+    id: number;
+    name: string;
+  };
+}
+
+export interface ChecklistItem {
+  completed: boolean | undefined;
+  id: number;
+  title: string;
+  is_completed: boolean;
+  template_item?: {
+    name: string;
+    description: string;
+  };
+}
+
+
+export interface DetailedEmployeeChecklist {
+  id: number;
+  template: {
+    name: string;
+  };
+  items: ChecklistItem[];
+}

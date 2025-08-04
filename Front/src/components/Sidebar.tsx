@@ -31,9 +31,7 @@ const Sidebar: React.FC<SidebarProps> = ({ open, onClose, isMobile, isAdmin }) =
     { to: '/dashboard', label: 'Dashboard' },
     { to: '/employees', label: 'Funcionários' },
     { to: '/departments', label: 'Departamentos' },
-    { to: '/documents', label: 'Documentos' },
-    { to: '/tags', label: 'Tags' },
-    { to: '/labor-rights', label: 'Direitos Trabalhistas' },
+    { to: '/checklist-templates', label: 'Checklists' },
   ];
 
   if (isAdmin) {

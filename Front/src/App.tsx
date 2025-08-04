@@ -13,6 +13,8 @@ import DepartmentDetails from './components/DepartmentDetails';
 import Departments from './components/Department';
 import AuthorizedEmails from './components/AuthorizedEmails';
 import Unauthorized from './components/Unauthorized';
+import ChecklistTemplateForm from './components/ChecklistTemplates/ChecklistTemplateForm';
+import ChecklistTemplateList from './components/ChecklistTemplates/ChecklistTemplateList';
 
 const App = () => {
   const { isAuthenticated, loading, user } = useAuth();
@@ -92,7 +94,42 @@ const App = () => {
             )
           }
         />
-
+        <Route
+          path="/checklist-templates"
+          element={
+            isAuthenticated ? (
+              <MainLayout>
+                <ChecklistTemplateList />
+              </MainLayout>
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
+        <Route
+          path="/checklist-templates/new"
+          element={
+            isAuthenticated ? (
+              <MainLayout>
+                <ChecklistTemplateForm />
+              </MainLayout>
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
+        <Route
+          path="/checklist-templates/:id/edit"
+          element={
+            isAuthenticated ? (
+              <MainLayout>
+                <ChecklistTemplateForm />
+              </MainLayout>
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
         {/* Dashboard como rota padrão */}
         <Route
           path="/*"

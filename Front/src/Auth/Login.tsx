@@ -1,6 +1,5 @@
 import React from 'react';
 import styles from './Auth.module.css';
-import { NavLink } from 'react-router-dom';
 
 const Login: React.FC = () => {
     const handleGoogleLogin = () => {
@@ -10,16 +9,16 @@ const Login: React.FC = () => {
     return (
         <div className={styles.authContainer}>
             <div className={styles.card}>
-                <h2>Entrar no EMMA</h2>
+                <h2>Bem-vindo ao EMMA</h2>
 
-                <button className={styles.button} onClick={handleGoogleLogin}>
-                    <img src="/google-icon.svg" alt="Google" style={{ width: 20, marginRight: 8 }} />
-                    Entrar com Google
-                </button>
-
-                <div className={styles.switchLink}>
-                    Ainda não tem conta? <NavLink to={'/register'}> Registre-se </NavLink> com Google.
+                <div style={{ justifyItems: 'center' }}>
+                    <div style={{height:30}}></div>
+                    <button className={styles.googleButton} style={{ backgroundColor: 'blue', color: 'white' }} onClick={handleGoogleLogin}>
+                        Entrar com Google
+                    </button>
+                    <p className={styles.subtitle} style={{margin: 20}}>Faça login para continuar</p>
                 </div>
+
             </div>
         </div>
     );

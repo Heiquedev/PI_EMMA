@@ -3,70 +3,63 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background: linear-gradient(145deg, #eef2f3, #ffffff);
+    background: linear-gradient(145deg, #f5f7fa, #c3cfe2);
+    font-family: 'Poppins', sans-serif;
+    padding: 1rem;
 }
 
 .card {
     background: #fff;
-    padding: 2rem;
+    padding: 3rem 2rem;
     border-radius: 1.5rem;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 400px;
-}
-
-h2 {
     text-align: center;
-    margin-bottom: 1.5rem;
-    font-size: 1.8rem;
-    color: #333;
+    transition: transform 0.3s ease;
 }
 
-.formGroup {
-    display: flex;
-    flex-direction: column;
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.logo {
+    width: 60px;
     margin-bottom: 1rem;
 }
 
-.formGroup label {
+h2 {
     margin-bottom: 0.5rem;
-    font-weight: 500;
-    color: #555;
+    font-size: 1.8rem;
+    color: #222;
 }
 
-.formGroup input {
-    padding: 0.75rem;
-    border: 1px solid #ccc;
+.subtitle {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 2rem;
+}
+
+.googleButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff;
+    color: #444;
+    font-weight: 500;
+    padding: 0.75rem 1rem;
+    border: 1px solid #ddd;
     border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s;
     font-size: 1rem;
 }
 
-.button {
-    background-color: #007bff;
-    color: #fff;
-    font-weight: bold;
-    padding: 0.75rem;
-    border: none;
-    border-radius: 0.5rem;
-    cursor: pointer;
-    transition: background-color 0.3s;
+.googleButton:hover {
+    background-color: #f1f1f1;
 }
 
-.button:hover {
-    background-color: #0056b3;
-}
-
-.switchLink {
-    margin-top: 1rem;
-    text-align: center;
-    font-size: 0.9rem;
-}
-
-.switchLink a {
-    color: #007bff;
-    text-decoration: none;
-}
-
-.switchLink a:hover {
-    text-decoration: underline;
+.googleIcon {
+    width: 20px;
+    margin-right: 10px;
 }

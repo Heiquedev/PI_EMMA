@@ -6,8 +6,7 @@
 
 ## 📸 Demonstração
 
-![Dashboard](./src/assets/demo-dashboard.png)  
-*Exemplo de dashboard com estatísticas e gráficos.*
+![Dashboard](.Front/src/assets/image.png)  
 
 ---
 

@@ -6,7 +6,7 @@
 
 ## 📸 Demonstração
 
-![Dashboard](.Front/src/assets/image.png)  
+![Dashboard](./Front/src/assets/image.png)  
 
 ---
 

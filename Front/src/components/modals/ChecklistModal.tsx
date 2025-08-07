@@ -12,34 +12,49 @@ interface Props {
 const ChecklistModal: React.FC<Props> = ({ checklist, onClose, onToggleItem }) => {
   if (!checklist) return <div>Carregando...</div>;
 
-  console.log(checklist);
-  
+  const completedCount = checklist.items.filter((item) => item.completed).length;
+  const totalCount = checklist.items.length;
+  const progressPercent = totalCount === 0 ? 0 : Math.round((completedCount / totalCount) * 100);
 
   return (
     <div className={styles.overlay}>
       <div className={styles.modalContent}>
-        <h2>{checklist.template.name}</h2>
+        <div className={styles.modalHeader}>
+          <h2>{checklist.template.name}</h2>
+          <button onClick={onClose} className={styles.closeButton}>&times;</button>
+        </div>
+
+        <div className={styles.progressContainer}>
+          <div className={styles.progressBarBackground}>
+            <div className={styles.progressBarFill} style={{ width: `${progressPercent}%` }} />
+          </div>
+          <span className={styles.progressText}>{progressPercent}% concluído</span>
+        </div>
+
         <ul className={styles.itemList}>
-          {checklist.items.map(item => (
-            <li key={item.id} className={styles.item}>
-              <input
-                type="checkbox"
-                checked={item.completed}
-                onChange={() => onToggleItem(item.id)}
-                id={`check-${item.id}`}
-              />
-              <label htmlFor={`check-${item.id}`}>
-                <strong>{item.template_item?.title || item.title}</strong>
-                {item.template_item?.description && <p>{item.template_item.description}</p>}
+          {checklist.items.map((item) => (
+            <li key={item.id} className={`${styles.item} ${item.completed ? styles.completed : ''}`}>
+              <label htmlFor={`check-${item.id}`} className={styles.itemLabel}>
+                <input
+                  type="checkbox"
+                  checked={item.completed}
+                  onChange={() => onToggleItem(item.id)}
+                  id={`check-${item.id}`}
+                  className={styles.checkbox}
+                />
+                <div>
+                  <strong>{item.template_item?.title || item.title}</strong>
+                  {item.template_item?.description && (
+                    <p className={styles.itemDescription}>{item.template_item.description}</p>
+                  )}
+                </div>
               </label>
             </li>
           ))}
         </ul>
-        <button className={styles.closeButton} onClick={onClose}>Fechar</button>
       </div>
     </div>
   );
 };
-
 
 export default ChecklistModal;

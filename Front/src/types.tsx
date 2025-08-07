@@ -107,7 +107,7 @@ export interface Employee {
   email: string;
   date_of_birth: string;
   hire_date: string;
-  absences: Absence[];
+  absences?: Absence[];
   cpf: string;
   rg?: string;
   phone?: string;
@@ -124,6 +124,10 @@ export interface Employee {
   reports?: Report[];
   incidents?: Incident[];
   attendances: Attendance[];
+  termination_date?: string;
+  termination_type?: 'without_cause' | 'resignation' | 'with_cause';
+  termination_reason?: string;
+  notice_paid: boolean;
 }
 
 export interface PayRoll {
@@ -182,7 +186,7 @@ export interface EmployeeChecklist {
   id: number;
   employee_id: number;
   template_id: number;
-  status: 'in_progress' | 'completed' | 'not_started';
+  status: 'in_progress' | 'completed' | 'pending';
   progress: number; // 0-100
   template: {
     id: number;

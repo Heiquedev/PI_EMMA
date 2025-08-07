@@ -6,7 +6,7 @@ import Employees from './components/Employees';
 import { useAuth } from './context/AuthContext';
 import EmployeeDetails from './components/EmployeeDetails';
 import { useState } from 'react';
-import EmployeeModal from './components/EmployeeModal';
+import EmployeeModal from './components/modals/EmployeeModal';
 import GoogleCallback from './layout/GoogleCallback';
 import Register from './Auth/Register';
 import DepartmentDetails from './components/DepartmentDetails';

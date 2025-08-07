@@ -94,5 +94,6 @@ php artisan serve
 ## 📫 Autores
 
 Desenvolvido por **Gustavo Wazlawick**, **Heique Rodrigues**, **Arthur Rodrigues**, **Henrique Oliveria**
+
 Projeto acadêmico — Curso Técnico em Desenvolvimento de Software - Senac
 

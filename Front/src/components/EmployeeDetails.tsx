@@ -44,7 +44,7 @@ const EmployeeDetails: React.FC = () => {
                 setChecklists((prev) => [...prev, res.data]);
                 setSelectedTemplateId('');
                 console.log('Checklist atribuído com sucesso:', res.data);
-                
+
             })
             .catch((err) => {
                 console.error('Erro ao atribuir checklist:', err);
@@ -101,17 +101,45 @@ const EmployeeDetails: React.FC = () => {
     const toggleChecklistItem = (itemId: number) => {
         if (!detailedChecklist) return;
 
-        api.patch(`/api/employee-checklists/${detailedChecklist.id}/items/${itemId}/toggle`)
-            .then(() => {
-                setDetailedChecklist(prev => prev ? {
-                    ...prev,
-                    items: prev.items.map(item =>
-                        item.id === itemId ? { ...item, completed: !item.is_completed } : item
-                    )
-                } : null);
-            })
-            .catch(err => console.error("Erro ao alternar item:", err));
+        const updatedItems = detailedChecklist.items.map((item) =>
+            item.id === itemId ? { ...item, completed: !item.completed } : item
+        );
+
+        const completedCount = updatedItems.filter((item) => item.completed).length;
+        const totalCount = updatedItems.length;
+        const newProgress = Math.round((completedCount / totalCount) * 100);
+
+        let newStatus: 'pending' | 'in_progress' | 'completed' = 'pending';
+        if (newProgress === 100) newStatus = 'completed';
+        else if (newProgress > 0) newStatus = 'in_progress';
+
+        const updatedChecklist = {
+            ...detailedChecklist,
+            items: updatedItems,
+            progress: newProgress,
+            status: newStatus,
+        };
+
+        // Atualiza o checklist detalhado no modal
+        setDetailedChecklist(updatedChecklist);
+
+        // Atualiza a lista principal de checklists (cards) também
+        setChecklists((prev) =>
+            prev.map((cl) =>
+                cl.id === updatedChecklist.id
+                    ? {
+                        ...cl,
+                        progress: newProgress,
+                        status: newStatus,
+                    }
+                    : cl
+            )
+        );
+
+        // (Opcional) Enviar PATCH para a API
+        api.patch(`/api/employee-checklists/${updatedChecklist.id}/items/${itemId}/toggle`).catch(console.error);
     };
+
 
 
 

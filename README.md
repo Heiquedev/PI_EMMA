@@ -61,6 +61,7 @@
 5. Abra um Pull Request
 ---
 
+## Passos
 ```bash
 # Clone o repositório do frontend
 git clone https://github.com/Heiquedev/PI_EMMA.git
